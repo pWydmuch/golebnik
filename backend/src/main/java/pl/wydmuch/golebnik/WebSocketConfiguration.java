@@ -11,15 +11,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/socket")
+        registry.addEndpoint("/ws")
                 .setAllowedOrigins("*")
                 .withSockJS();
-
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
+//        registry.enableSimpleBroker("/topic");
+        registry.enableStompBrokerRelay("/topic")
+                .setRelayHost("192.168.99.100")
+                .setRelayPort(61613)
+                .setClientLogin("guest")
+                .setClientPasscode("guest");
     }
 }
