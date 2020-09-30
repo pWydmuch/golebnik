@@ -1,0 +1,27 @@
+<div id="chat-page">
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Spring WebSocket Chat Demo</h2>
+    </div>
+    <ul id="messageArea">
+      <li *ngFor="let message of messages">
+        <div [ngClass]="getMessageClass(message)">
+          <div  *ngIf="message.content">
+            <i [style.background-color] = "getAvatarColor(message)">{{message.sender ? message.sender[0] : "" }}</i>
+            <span >{{message.sender ? message.sender : ""}}</span>
+          </div>
+          <p >{{getMessageContent(message)}}</p>
+        </div>
+      </li>
+    </ul>
+    <form id="messageForm" name="messageForm">
+      <div class="form-group">
+        <div class="input-group clearfix">
+          <input type="text" [(ngModel)]='messageToSend.content' name="messageToSend" id="message"
+                 placeholder="Type a message..." autocomplete="off" class="form-control"/>
+          <button (click)="sendMessage()" class="primary">Send</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

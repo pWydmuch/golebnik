@@ -1,4 +1,4 @@
-package pl.wydmuch.golebnik;
+package pl.wydmuch.golebnik.chat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+
         if(username != null) {
             logger.info("User Disconnected : " + username);
 
