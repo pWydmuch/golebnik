@@ -1,9 +1,6 @@
 package pl.wydmuch.golebnik.games.tictactoe;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class TicTacToe {
@@ -24,7 +21,10 @@ public class TicTacToe {
         return board;
     }
 
-    public void setField(int row, int column, FieldContent playerSign) {
+    public void makeMove(Move move) {
+        int row = move.getRow();
+        int column = move.getColumn();
+        FieldContent playerSign = move.getPlayerSign();
         checkForInvalidRequest(board[row][column], playerSign);
         board[row][column] = playerSign;
         lastAddedSign = playerSign;
@@ -84,15 +84,61 @@ public class TicTacToe {
     }
 
     private void checkForInvalidRequest(FieldContent fieldContent, FieldContent playerSign) {
-        if (playerSign == lastAddedSign) throw new RepeatedSignException();
-        if (playerSign == FieldContent.EMPTY) throw new EmptyFieldSettingException();
-        if (fieldContent != FieldContent.EMPTY) throw new FieldAlreadyTakenException();
+        if (playerSign == lastAddedSign) throw new RepeatedSignException("After X must be O, After O must be X");
+        if (playerSign == FieldContent.EMPTY) throw new EmptyFieldSettingException("You can't set empty sign");
+        if (fieldContent != FieldContent.EMPTY) throw new FieldAlreadyTakenException("This field is already taken");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicTacToe other = (TicTacToe) o;
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board[row].length; column++) {
+                if (!Objects.equals(board[row][column],other.board[row][column])){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-    public class FieldAlreadyTakenException extends RuntimeException {}
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(board);
+    }
 
-    public class RepeatedSignException  extends RuntimeException {}
+    @Override
+    public String toString() {
+        return "TicTacToe{" +
+                "board=" + Arrays.toString(board) +
+                '}';
+    }
 
-    public class EmptyFieldSettingException extends RuntimeException {}
+    public class FieldAlreadyTakenException extends RuntimeException {
+        public FieldAlreadyTakenException() {
+        }
+        public FieldAlreadyTakenException(String message) {
+            super(message);
+        }
+    }
+
+    public class RepeatedSignException  extends RuntimeException {
+        public RepeatedSignException() {
+        }
+
+        public RepeatedSignException(String message) {
+            super(message);
+        }
+    }
+
+    public class EmptyFieldSettingException extends RuntimeException {
+        public EmptyFieldSettingException() {
+        }
+
+        public EmptyFieldSettingException(String message) {
+            super(message);
+        }
+    }
 }

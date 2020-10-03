@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FieldContentTest {
 
-
     @Test
     void allHaveSameSign_shouldReturnFalse_whenFieldIsEmpty() {
         FieldContent fieldContent = FieldContent.EMPTY;
