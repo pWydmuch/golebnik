@@ -1,0 +1,9 @@
+<div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+  <div class="container">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <div *ngFor="let row of board, let i = index" class="row">
+        <app-field *ngFor="let field of row, let j = index" (click)="handleFieldClick(i,j)" [value]=field></app-field>
+      </div>
+    </div>
+  </div>
+</div>

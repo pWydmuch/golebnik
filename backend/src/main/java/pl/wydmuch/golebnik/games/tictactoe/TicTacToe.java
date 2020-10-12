@@ -7,10 +7,14 @@ public class TicTacToe {
 
     private FieldContent[][] board;
     private FieldContent lastAddedSign;
+    private List<FieldContent> availableSigns;
     private static final int ROW_NR = 3;
     private static final int COLUMN_NR = 3;
 
     public TicTacToe() {
+        availableSigns = new ArrayList<>();
+        availableSigns.add(FieldContent.O);
+        availableSigns.add(FieldContent.X);
         board = new FieldContent[ROW_NR][COLUMN_NR];
         for (FieldContent[] boardRow : board) {
             Arrays.fill(boardRow, FieldContent.EMPTY);
@@ -114,6 +118,10 @@ public class TicTacToe {
         return "TicTacToe{" +
                 "board=" + Arrays.toString(board) +
                 '}';
+    }
+
+    public List<FieldContent> getAvailableSigns() {
+        return availableSigns;
     }
 
     public class FieldAlreadyTakenException extends RuntimeException {

@@ -4,13 +4,17 @@ import {AppComponent} from './app.component';
 import {ChatComponent} from './components/chat/chat.component';
 import {UserJoinFormComponent} from './components/user-join-form/user-join-form.component';
 import {AppRoutingModule} from './app-routing.module';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
+import { BoardComponent } from './components/tictactoe/board/board.component';
+import { FieldComponent } from './components/tictactoe/field/field.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
-    UserJoinFormComponent
+    UserJoinFormComponent,
+    BoardComponent,
+    FieldComponent
   ],
   imports: [
     BrowserModule,
