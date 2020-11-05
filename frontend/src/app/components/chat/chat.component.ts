@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {WebSocketService} from 'src/app/services/web-socket.service';
 import {ActivatedRoute} from '@angular/router';
 import {ChatMessage, MessageType} from '../../models/chat-message';
@@ -11,8 +11,11 @@ import {Client} from 'stompjs';
 })
 export class ChatComponent implements OnInit {
 
-  private readonly stompClient: Client;
-  private username: string;
+  @ViewChild('messageArea', {static: false}) messageArea: ElementRef;
+  @ViewChild('messageInput', {static: false}) messageInput: ElementRef;
+  @Input() private stompClient: Client;
+  private playerSessionId: string;
+  private roomId: string = "dfgd4";
   private messages: ChatMessage[] = [];
   private messageToSend: ChatMessage = new ChatMessage();
   private readonly colors = [
@@ -20,28 +23,32 @@ export class ChatComponent implements OnInit {
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
   ];
 
-  constructor(private webSocketService: WebSocketService, private route: ActivatedRoute) {
-    this.stompClient = this.webSocketService.connect();
+  constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.username = history.state.data;
-    this.onConnected();
+    // this.username = history.state.data;
+    // this.onConnected();
   }
 
-  onConnected() {
-    this.stompClient.connect({}, () => {
-        this.stompClient.subscribe('/topic/public', (payload) => this.onMessageReceived(payload));
-        this.stompClient.send('/app/chat.addUser', {},
-          JSON.stringify({sender: this.username, type: MessageType.JOIN})
-        );
-      },
-      this.onError);
+  onConnected(roomId: string, playerSessionId: string) {
+    this.roomId = roomId;
+    this.playerSessionId = playerSessionId;
+    this.stompClient.subscribe(`/topic/chat/${this.roomId}`, (payload) => this.onMessageReceived(payload));
+    this.stompClient.send(`/app/chat/${this.roomId}/send`, {},
+      JSON.stringify({sender: this.playerSessionId, type: MessageType.JOIN})
+    );
   }
 
-  onMessageReceived(payload) {
-    const message = JSON.parse(payload.body);
-    this.messages.push(message);
+  async onMessageReceived(payload) {
+    const messages = JSON.parse(payload.body);
+    this.messages = messages;
+    await this.delay(75);
+    this.messageArea.nativeElement.scrollTop = this.messageArea.nativeElement.scrollHeight;
+  }
+
+  private delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
 
@@ -54,13 +61,15 @@ export class ChatComponent implements OnInit {
   sendMessage(event) {
     if (this.messageToSend.content && this.stompClient) {
       this.messageToSend.type = MessageType.CHAT;
-      this.messageToSend.sender = this.username;
-      this.stompClient.send('/app/chat.sendMessage', {}, JSON.stringify(this.messageToSend));
+      this.messageToSend.sender = this.playerSessionId;
+      this.stompClient.send(`/app/chat/${this.roomId}/send`, {}, JSON.stringify(this.messageToSend));
       this.messageToSend.content = '';
+      this.messageInput.nativeElement.focus();
     }
   }
 
-  getMessageContent(message: ChatMessage){
+  getMessageContent(message: ChatMessage) {
+    console.log(message)
     switch (message.type) {
       case MessageType.CHAT:
         return message.content;
@@ -73,8 +82,8 @@ export class ChatComponent implements OnInit {
 
   getMessageClass(message: ChatMessage) {
     return {
-      'event-message' : message.type !== MessageType.CHAT,
-      'chat-message' : message.type === MessageType.CHAT
+      'event-message': message.type !== MessageType.CHAT,
+      'chat-message': message.type === MessageType.CHAT
     };
   }
 

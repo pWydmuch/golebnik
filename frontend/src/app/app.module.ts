@@ -7,6 +7,11 @@ import {AppRoutingModule} from './app-routing.module';
 import {FormsModule} from '@angular/forms';
 import { BoardComponent } from './components/tictactoe/board/board.component';
 import { FieldComponent } from './components/tictactoe/field/field.component';
+import {HttpClientModule} from "@angular/common/http";
+import { LobbyComponent } from './components/lobby/lobby.component';
+import { RoomComponent } from './components/room/room.component';
+import {ToastrModule} from "ngx-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -14,12 +19,17 @@ import { FieldComponent } from './components/tictactoe/field/field.component';
     ChatComponent,
     UserJoinFormComponent,
     BoardComponent,
-    FieldComponent
+    FieldComponent,
+    LobbyComponent,
+    RoomComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,23 +1,36 @@
 <div id="chat-page">
   <div class="chat-container">
     <div class="chat-header">
-      <h2>Spring WebSocket Chat Demo</h2>
+      <h2>Chat</h2>
     </div>
-    <ul id="messageArea">
+    <ul #messageArea id="messageArea">
       <li *ngFor="let message of messages">
         <div [ngClass]="getMessageClass(message)">
-          <div  *ngIf="message.content">
-            <i [style.background-color] = "getAvatarColor(message)">{{message.sender ? message.sender[0] : "" }}</i>
-            <span >{{message.sender ? message.sender : ""}}</span>
+          <div *ngIf="message.content">
+            <div *ngIf="message.sender==playerSessionId;
+            then outcomingMessage;
+            else incomingMessage">
+            </div>
+            <ng-template #outcomingMessage>
+              <div class="outgoing_msg">
+                <div class="sent_msg">
+                  <p>{{getMessageContent(message)}}</p>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #incomingMessage>
+              <i [style.background-color]="getAvatarColor(message)">{{message.sender ? message.sender[0] : "" }}</i>
+              <span>{{message.sender ? message.sender : ""}}</span>
+              <p>{{getMessageContent(message)}}</p>
+            </ng-template>
           </div>
-          <p >{{getMessageContent(message)}}</p>
         </div>
       </li>
     </ul>
     <form id="messageForm" name="messageForm">
       <div class="form-group">
         <div class="input-group clearfix">
-          <input type="text" [(ngModel)]='messageToSend.content' name="messageToSend" id="message"
+          <input #messageInput type="text" [(ngModel)]='messageToSend.content' name="messageToSend" id="message"
                  placeholder="Type a message..." autocomplete="off" class="form-control"/>
           <button (click)="sendMessage()" class="primary">Send</button>
         </div>

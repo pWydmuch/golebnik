@@ -1,0 +1,10 @@
+<button (click)="addPlayer()">Sit player1</button>
+<button (click)="addPlayer()">Sit player2</button>
+<button (click)="removePlayer()">remove player1</button>
+<button (click)="removePlayer()">remove player2</button>
+<div class="container ">
+  <div class="row">
+  <app-tic-tac-toe-board class="col-xs-8" [stompClient]="stompClient"></app-tic-tac-toe-board>
+  <app-chat class="col-xs-4 mx-sm-5" [stompClient]="stompClient"></app-chat>
+  </div>
+</div>

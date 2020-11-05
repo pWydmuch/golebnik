@@ -1,0 +1,9 @@
+<div>
+  <ul>
+    <li *ngFor="let id of roomsIds">
+      <button (click)="goToRoom(id)"> {{id}}</button>
+    </li>
+  </ul>
+  <button (click)="createRoom()"></button>
+</div>
+
