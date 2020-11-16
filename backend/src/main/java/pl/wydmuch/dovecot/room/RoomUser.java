@@ -4,6 +4,7 @@ public class RoomUser {
     private String name;
     private String sessionId;
 
+
     public String getName() {
         return name;
     }

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.wydmuch.dovecot.games.tictactoe.GameDto;
 import pl.wydmuch.dovecot.games.tictactoe.Move;
+import pl.wydmuch.dovecot.games.tictactoe.TicTacToe;
 
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -24,6 +26,12 @@ public class RoomController {
     @ResponseBody
     public void createRoom(){
         roomService.createRoom();
+    }
+
+    @DeleteMapping("/rooms/{roomId}")
+    @ResponseBody
+    public void deleteRoom(@PathVariable String roomId){
+        roomService.deleteRoom(roomId);
     }
 
 //    @GetMapping("/rooms/{roomId}")
@@ -44,9 +52,9 @@ public class RoomController {
 
     @PostMapping("rooms/{roomId}/players/{playerSessionId}")
     @ResponseBody
-    public void addPlayer(@PathVariable String roomId, @PathVariable String playerSessionId){
-        System.out.println("added");
-        roomService.addPlayer(playerSessionId,roomId,"jagoda");
+    public void addPlayer(@PathVariable String roomId, @PathVariable String playerSessionId,@RequestParam int playerNumber){
+        System.out.println("added " + playerNumber );
+        roomService.addPlayer(playerSessionId,roomId,"jagoda",playerNumber);
     }
 
     @DeleteMapping("rooms/{roomId}/players/{playerSessionId}")
@@ -54,6 +62,12 @@ public class RoomController {
     public void removePlayer(@PathVariable String roomId, @PathVariable String playerSessionId){
         System.out.println("removed");
         roomService.removePlayer(playerSessionId,roomId);
+    }
+
+    @GetMapping("rooms/{roomId}/players")
+    @ResponseBody
+    public List<TicTacToePlayer> getRoomSitPlayers(@PathVariable String roomId){
+        return roomService.getSitPlayers(roomId);
     }
 
     @MessageMapping("/rooms")

@@ -3,41 +3,53 @@ package pl.wydmuch.dovecot.room;
 import pl.wydmuch.dovecot.gameplay.Game;
 import pl.wydmuch.dovecot.games.tictactoe.TicTacToe;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Room {
   private String id;
   private TicTacToe game;
-  private Set<RoomUser> players;
+  private List<TicTacToePlayer> players;
   private int neededPlayersNumber = 2;
-  private RoomUser currentPlayer;
+  private int currentPlayerIndex;
+  private int startingPlayerIndex;
 
     public Room() {
-        players = new HashSet<>();
+        players = new ArrayList<>();
+        startingPlayerIndex = 0;
+        for(int i =0;i<neededPlayersNumber;i++){
+            players.add(null);
+        }
     }
 
     public String getId() {
         return id;
     }
 
+    public int getStartingPlayerIndex() {
+        return startingPlayerIndex;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
 
-
-
     public boolean allPlayersArePresent(){
-        return players.size() == neededPlayersNumber;
+        return players.size() == neededPlayersNumber && players.stream().noneMatch(Objects::isNull);
     }
 
-    public void addPlayer(RoomUser player){
-        if (players.size()<neededPlayersNumber)
-        players.add(player);
+    public void addPlayer(TicTacToePlayer player, int playerNumber){
+        if (playerCanJoinGame(player,playerNumber))
+            players.set(playerNumber,player);
     }
+
 
     public void removePlayer(String playerSessionId){
-        players.removeIf(p->p.getSessionId().equals(playerSessionId));
+        for (int i = 0; i < players.size(); i++) {
+            TicTacToePlayer player = players.get(i);
+            if (player !=null && player.getSessionId().equals(playerSessionId)){
+                players.set(i,null);
+            }
+        }
     }
 
     public void removePlayer(RoomUser player){
@@ -52,19 +64,25 @@ public class Room {
         this.game = game;
     }
 
-    public Set<RoomUser> getPlayers() {
+    public List<TicTacToePlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Set<RoomUser> players) {
+    public void setPlayers(List<TicTacToePlayer> players) {
         this.players = players;
     }
 
-    public RoomUser getCurrentPlayer() {
-        return currentPlayer;
+    public void changeStaringPlayerIndex(){
+        startingPlayerIndex = (startingPlayerIndex + 1)% neededPlayersNumber;
     }
 
-    public void setCurrentPlayer(RoomUser currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    private boolean playerCanJoinGame(TicTacToePlayer player, int playerNumber) {
+        return players.get(playerNumber) == null &&
+                players.stream()
+                        .filter(Objects::nonNull)
+                        .map(RoomUser::getSessionId)
+                        .noneMatch(id->player.getSessionId().equals(id));
     }
+
+
 }

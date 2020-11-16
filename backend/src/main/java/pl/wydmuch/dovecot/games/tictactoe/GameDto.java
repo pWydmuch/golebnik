@@ -15,19 +15,19 @@ public class GameDto {
         this.board = board;
     }
 
-    public boolean isWinner() {
+    public boolean getIsWinner() {
         return isWinner;
     }
 
-    public void setWinner(boolean winner) {
+    public void setIsWinner(boolean winner) {
         isWinner = winner;
     }
 
-    public boolean isDraw() {
+    public boolean getIsDraw() {
         return isDraw;
     }
 
-    public void setDraw(boolean draw) {
+    public void setIsDraw(boolean draw) {
         isDraw = draw;
     }
 

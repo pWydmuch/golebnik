@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Client, Message} from 'stompjs';
-import { PlayerSign, TicTacToeMove} from '../../../models/tic_tac_toe/tic-tac-toe-move';
+import {PlayerSign, TicTacToeMove} from '../../../models/tic_tac_toe/tic-tac-toe-move';
 import {WebSocketService} from '../../../services/web-socket.service';
 import {FieldContentDto, FieldContentType} from '../../../models/tic_tac_toe/field-content-type';
 import {TicTacToeGameState} from '../../../models/tic_tac_toe/tic-tac-toe-game-state';
@@ -26,16 +26,19 @@ export class BoardComponent implements OnInit {
   private gameState: TicTacToeGameState;
   private exceptionMessage: string;
 
-  constructor( private gamesService: GameService ,
-               private ticTacToeService: TicTacToeService,
-               private toastr: ToastrService) {
+  constructor(private gamesService: GameService,
+              private ticTacToeService: TicTacToeService,
+              private toastr: ToastrService) {
 
   }
 
   ngOnInit() {
-    console.log('child');
-    // this.gamesService.getGame(this.gameId).subscribe(resp => this.board = resp.board);
-    // console.log(this.board);
+    this.board = Array.from(Array(BoardComponent.ROW_NR),
+      () => Array(BoardComponent.COLUMN_NR)
+        .fill({
+          fieldContent: FieldContentType.EMPTY,
+          inWinningLine: false
+        }));
   }
 
   onConnected(roomId: string, playerSessionId: string) {
@@ -52,7 +55,15 @@ export class BoardComponent implements OnInit {
     console.log(message);
     this.gameState = message;
     this.board = message.board;
-
+    if (this.gameState.isWinner) {
+      this.toastr.info('There\'s winner', '', {
+        positionClass: 'toast-top-center',
+      });
+    } else if (this.gameState.isDraw) {
+      this.toastr.info('It\'s draw', '', {
+        positionClass: 'toast-top-center',
+      });
+    }
   }
 
   handleFieldClick(row: number, column: number) {
@@ -72,8 +83,8 @@ export class BoardComponent implements OnInit {
   private onExceptionReceived(err: Message) {
     console.log(err);
     this.toastr.error(err.body, '', {
-     positionClass: 'toast-top-center',
-   });
+      positionClass: 'toast-top-center',
+    });
   }
 
 }

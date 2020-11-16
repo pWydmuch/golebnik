@@ -37,7 +37,10 @@ export class LobbyComponent implements OnInit {
 
 
   goToRoom(roomId: string) {
-  this.router.navigateByUrl('/room', {state: {data: roomId}});
+    this.router.navigateByUrl('/room', {state: {roomId, playersNumber: 2}});
   }
 
+  removeRoom(roomId: string) {
+    this.gamesService.removeRoom(roomId).subscribe();
+  }
 }

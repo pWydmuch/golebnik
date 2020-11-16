@@ -1,7 +1,11 @@
-<button (click)="addPlayer()">Sit player1</button>
-<button (click)="addPlayer()">Sit player2</button>
-<button (click)="removePlayer()">remove player1</button>
-<button (click)="removePlayer()">remove player2</button>
+<button (click)="goBack()">Wróć</button>
+
+<div *ngFor="let number of playersNumber | times" class="m-sm-2" >
+  <p>Player {{number}}</p>
+  <button class="btn btn-primary" (click)="addPlayer(number -1)"> {{playerButtonTexts[number-1]}} </button>
+  <button class="btn btn-danger"(click)="removePlayer(number -1)">remove player</button>
+</div>
+
 <div class="container ">
   <div class="row">
   <app-tic-tac-toe-board class="col-xs-8" [stompClient]="stompClient"></app-tic-tac-toe-board>

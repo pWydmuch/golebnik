@@ -12,6 +12,7 @@ import { LobbyComponent } from './components/lobby/lobby.component';
 import { RoomComponent } from './components/room/room.component';
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { TimesPipe } from './pipes/times.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     BoardComponent,
     FieldComponent,
     LobbyComponent,
-    RoomComponent
+    RoomComponent,
+    TimesPipe
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public class TicTacToe extends Game {
 
     private Field[][] board;
-    private FieldContent lastAddedSign = FieldContent.EMPTY;
+    private FieldContent lastAddedSign = null;
     private List<FieldContent> availableSigns;
     private static final int ROW_NR = 3;
     private static final int COLUMN_NR = 3;
@@ -42,6 +42,10 @@ public class TicTacToe extends Game {
 
     public FieldContent getWinnerSign() {
         return isGameWon() ? lastAddedSign : null;
+    }
+
+    public boolean firstMoveWasMade(){
+        return lastAddedSign != null;
     }
 
     public boolean isGameEnded() {

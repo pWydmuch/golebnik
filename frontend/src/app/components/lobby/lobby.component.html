@@ -1,9 +1,9 @@
 <div>
   <ul>
     <li *ngFor="let id of roomsIds">
-      <button (click)="goToRoom(id)"> {{id}}</button>
+      <button class="btn btn-success my-sm-1" (click)="goToRoom(id)">Room {{id}}</button>
+      <div (click)="removeRoom(id)">X</div>
     </li>
   </ul>
-  <button (click)="createRoom()"></button>
 </div>
-
+<button class="btn btn-primary ml-sm-3" (click)="createRoom()">Create a room</button>
