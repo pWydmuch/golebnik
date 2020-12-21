@@ -5,7 +5,7 @@ package pl.wydmuch.dovecot.games.tictactoe;
 
 //    @Override
 //    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> attributes) throws Exception {
-//        TicTacToe game = new TicTacToe();
+//        TicTacToeGameEngine game = new TicTacToeGameEngine();
 //        attributes.put("game", game);
 //        return true;
 //

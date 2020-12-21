@@ -7,9 +7,8 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.wydmuch.dovecot.games.tictactoe.GameDto;
-import pl.wydmuch.dovecot.games.tictactoe.Move;
-import pl.wydmuch.dovecot.games.tictactoe.TicTacToe;
+import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeGameState;
+import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeMove;
 
 
 import java.util.List;
@@ -36,18 +35,18 @@ public class RoomController {
 
 //    @GetMapping("/rooms/{roomId}")
 //    @ResponseBody
-//    public GameDto getGame(@PathVariable String roomId){
+//    public TicTacToeGameState getGame(@PathVariable String roomId){
 //
 //    }
     @SubscribeMapping("/ttt/{roomId}")
-    public GameDto onSubscription(@DestinationVariable String roomId){
+    public TicTacToeGameState onSubscription(@DestinationVariable String roomId){
         System.out.println("Subbb");
         return roomService.onSubscription(roomId);
     }
 
     @MessageMapping("/ttt/{roomId}")
-    public void makeMove(@Payload Move move, @DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor){
-        roomService.makeMove(roomId,move,headerAccessor);
+    public void makeMove(@Payload TicTacToeMove ticTacToeMove, @DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor){
+        roomService.makeMove(roomId, ticTacToeMove,headerAccessor);
     }
 
     @PostMapping("rooms/{roomId}/players/{playerSessionId}")

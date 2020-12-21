@@ -34,7 +34,7 @@ export class RoomService {
     return this.http.delete(`${this.url}/${roomId}/players/${playerSessionId}`);
   }
 
-  getSitPlayers(roomId: string): Observable<any[]> {
+  getSitPlayers(roomId: string): Observable<any> {
     return this.http.get(`${this.url}/${roomId}/players`);
   }
 }

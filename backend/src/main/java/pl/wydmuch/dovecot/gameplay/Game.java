@@ -1,7 +1,7 @@
 package pl.wydmuch.dovecot.gameplay;
 
-import pl.wydmuch.dovecot.games.tictactoe.GameDto;
-import pl.wydmuch.dovecot.games.tictactoe.Move;
+import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeGameState;
+import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeMove;
 
 import java.util.Set;
 
@@ -12,9 +12,9 @@ public abstract class Game {
     public boolean areAllPlayersPresent(){
         return players.size() == numberOfNeededPlayers;
     };
-    public abstract void makeMove(Move move);
+    public abstract void makeMove(TicTacToeMove ticTacToeMove);
     //TODO trzeba jakos wymyslic, zeby to bylo bardziej generyczne GameState
-    public abstract GameDto getState();
+    public abstract TicTacToeGameState getState();
 
     public String getRoomId() {
         return roomId;

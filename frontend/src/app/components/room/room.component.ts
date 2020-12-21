@@ -3,9 +3,10 @@ import {RoomService} from '../../services/room.service';
 import {ActivatedRoute} from '@angular/router';
 import {WebSocketService} from '../../services/web-socket.service';
 import {Client, Message} from 'stompjs';
-import {BoardComponent} from '../tictactoe/board/board.component';
-import {ChatComponent} from '../chat/chat.component';
+import {ChatComponent} from '../chat/chat/chat.component';
 import { Location } from '@angular/common';
+import {TicTacToeBoardComponent} from "../games/tictactoe/tic-tac-toe-board/tic-tac-toe-board.component";
+
 
 @Component({
   selector: 'app-room',
@@ -18,7 +19,7 @@ export class RoomComponent implements OnInit {
   private playerSessionId: string;
   private players: any[];
   private playersNumber: number;
-  @ViewChild(BoardComponent,  {static: false}) boardComp: BoardComponent;
+  @ViewChild(TicTacToeBoardComponent,  {static: false}) boardComp: TicTacToeBoardComponent;
   @ViewChild(ChatComponent,  {static: false}) chatComp: ChatComponent;
   playerButtonTexts: string[];
 

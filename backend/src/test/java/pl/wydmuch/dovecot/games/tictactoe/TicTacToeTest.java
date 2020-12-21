@@ -9,15 +9,15 @@
 //
 //import static org.assertj.core.api.Assertions.assertThat;
 //import static org.junit.jupiter.api.Assertions.assertThrows;
-//import pl.wydmuch.dovecot.games.tictactoe.Field.FieldContent;
+//import pl.wydmuch.dovecot.games.tictactoe.engine.Field.FieldContent;
 //
 //class TicTacToeTest {
 //
-//    private TicTacToe ticTacToe;
+//    private TicTacToeGameEngine ticTacToe;
 //
 //    @BeforeEach
 //    void setUp() {
-//        ticTacToe = new TicTacToe();
+//        ticTacToe = new TicTacToeGameEngine();
 //    }
 //
 //    @Test
@@ -34,7 +34,7 @@
 //        int column = 1;
 //        FieldContent sign = FieldContent.O;
 //
-//        ticTacToe.makeMove(new Move(row, column, sign));
+//        ticTacToe.makeMove(new TicTacToeMove(row, column, sign));
 ////        FieldContent[][] board = ticTacToe.getBoard();
 //
 //        assertThat(board[row][column]).isEqualTo(sign);
@@ -42,28 +42,28 @@
 //
 //    @Test
 //    void setField_shouldThrowEmptyFieldSettingException_whenSettingEmptyField() {
-//        assertThrows(TicTacToe.EmptyFieldSettingException.class, () -> ticTacToe.makeMove(new Move(1, 1, FieldContent.EMPTY)));
+//        assertThrows(TicTacToeGameEngine.EmptyFieldSettingException.class, () -> ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.EMPTY)));
 //    }
 //
 //    @Test
 //    void setField_shouldThrowRepeatedSignException_whenSetTwoSameSignsInRow() {
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.O));
-//        assertThrows(TicTacToe.RepeatedSignException.class, () -> ticTacToe.makeMove(new Move(2, 2, FieldContent.O)));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.O));
+//        assertThrows(TicTacToeGameEngine.RepeatedSignException.class, () -> ticTacToe.makeMove(new TicTacToeMove(2, 2, FieldContent.O)));
 //    }
 //
 //    @Test
 //    void isDraw_shouldReturnTrue_whenWholeBoardFilledAndNoLineHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.O));
 //
-//        ticTacToe.makeMove(new Move(1, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 2, FieldContent.O));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 2, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.X));
 //
-//        ticTacToe.makeMove(new Move(2, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(2, 1, FieldContent.X));
-//        ticTacToe.makeMove(new Move(2, 2, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 2, FieldContent.O));
 //
 //        boolean isDraw = ticTacToe.isDraw();
 //
@@ -72,11 +72,11 @@
 //
 //    @Test
 //    void isDraw_shouldReturnFalse_whenLineHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(1, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.O));
 //
 //        boolean isDraw = ticTacToe.isDraw();
 //
@@ -85,16 +85,16 @@
 //
 //    @Test
 //    void isDraw_shouldReturnFalse_whenThereIsEmptyField() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.O));
 //
-//        ticTacToe.makeMove(new Move(1, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 2, FieldContent.O));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 2, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.X));
 //
-//        ticTacToe.makeMove(new Move(2, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(2, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 1, FieldContent.X));
 //
 //        boolean isDraw = ticTacToe.isDraw();
 //
@@ -110,11 +110,11 @@
 //
 //    @Test
 //    void isGameWon_shouldReturnTrue_whenWholeColumnHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.X));
-//        ticTacToe.makeMove(new Move(2, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 1, FieldContent.O));
 //
 //        boolean isGameWon = ticTacToe.isGameWon();
 //
@@ -123,11 +123,11 @@
 //
 //    @Test
 //    void isGameWon_shouldReturnTrue_whenWholeRowHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.X));
 //
 //        boolean isGameWon = ticTacToe.isGameWon();
 //
@@ -136,11 +136,11 @@
 //
 //    @Test
 //    void isGameWon_shouldReturnTrue_whenWholeSlashDiagonalHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(1, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(2, 1, FieldContent.X));
-//        ticTacToe.makeMove(new Move(2, 2, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 2, FieldContent.O));
 //
 //        boolean isGameWon = ticTacToe.isGameWon();
 //
@@ -149,11 +149,11 @@
 //
 //    @Test
 //    void isGameWon_shouldReturnTrue_whenWholeBackslashDiagonalHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(2, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 0, FieldContent.X));
 //
 //        boolean isGameWon = ticTacToe.isGameWon();
 //
@@ -162,11 +162,11 @@
 //
 //    @Test
 //    void getWinnerSign_shouldReturnWinnerSign_whenWholeLineHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(2, 0, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.X));
-//        ticTacToe.makeMove(new Move(1, 1, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(2, 0, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(1, 1, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.X));
 //
 //        FieldContent winnerSign = ticTacToe.getWinnerSign();
 //
@@ -175,9 +175,9 @@
 //
 //    @Test
 //    void getWinnerSign_shouldReturnNull_whenNoLineHasSameSign() {
-//        ticTacToe.makeMove(new Move(0, 0, FieldContent.X));
-//        ticTacToe.makeMove(new Move(0, 2, FieldContent.O));
-//        ticTacToe.makeMove(new Move(0, 1, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 0, FieldContent.X));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 2, FieldContent.O));
+//        ticTacToe.makeMove(new TicTacToeMove(0, 1, FieldContent.X));
 //
 //        FieldContent winnerSign = ticTacToe.getWinnerSign();
 //

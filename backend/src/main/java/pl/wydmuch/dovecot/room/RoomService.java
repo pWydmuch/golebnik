@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import pl.wydmuch.dovecot.gameplay.Game;
-import pl.wydmuch.dovecot.games.tictactoe.*;
+
+import pl.wydmuch.dovecot.games.Game;
+import pl.wydmuch.dovecot.games.GameFactory;
+import pl.wydmuch.dovecot.games.GameState;
+import pl.wydmuch.dovecot.games.Move;
+
 
 import java.util.*;
 
@@ -20,17 +24,16 @@ public class RoomService {
         return rooms.keySet();
     }
 
-    public void createGame(String roomId) {
+    public void createGame(String roomId, String gameName) {
         if (rooms.get(roomId).allPlayersArePresent() && rooms.get(roomId).getGame() == null) {
-            System.out.println("Created game");
-            TicTacToe game = new TicTacToe();
+            Game game = GameFactory.createGame(gameName);
             rooms.get(roomId).setGame(game);
         }
     }
 
     public void makeMove(String roomId, Move move, SimpMessageHeaderAccessor headerAccessor) {
         Room room = rooms.get(roomId);
-        TicTacToe game = room.getGame();
+        Game game = room.getGame();
         String playerSessionId = headerAccessor.getSessionId();
         if (game != null && isPlayerInGame(playerSessionId, roomId)) {
             if (!game.firstMoveWasMade()) {
@@ -39,25 +42,12 @@ public class RoomService {
                     throw new RuntimeException("It's not your turn to start");
                 }
             }
-            Field.FieldContent playerSign = (Field.FieldContent) headerAccessor.getSessionAttributes().get("sign");
-            if (Objects.isNull(playerSign)) {
-                List<Field.FieldContent> availablePlayerSigns = game.getAvailableSigns();
-                if (availablePlayerSigns.size() > 0) {
-                    playerSign = availablePlayerSigns.get(0);
-                    availablePlayerSigns.remove(0);
-                }
-                System.out.println("Room is null");
 
-                headerAccessor
-                        .getSessionAttributes()
-                        .put("sign", playerSign);
-            }
-            move.setPlayerSign(playerSign);
-            game.makeMove(move);
+            game.makeMove(move, playerSessionId);
 
             System.out.println("Room sent " + game);
-            GameDto gameDto = GameToDtoConverter.convertToDto(game);
-            messagingTemplate.convertAndSend("/topic/ttt/" + roomId, gameDto);
+            GameState gameState = game.getState();
+            messagingTemplate.convertAndSend("/topic/ttt/" + roomId, gameState);
             if (game.isGameEnded()) {
                 room.changeStaringPlayerIndex();
                 room.setGame(null);
@@ -69,6 +59,7 @@ public class RoomService {
             throw new RuntimeException("You don't play");
         }
     }
+
 
     private boolean isPlayerInGame(String playerSessionId, String roomId) {
         return rooms.get(roomId).getPlayers().stream()
@@ -97,13 +88,13 @@ public class RoomService {
         Room room = rooms.get(roomId);
         room.addPlayer(player, playerNumber);
         createGame(roomId);
-        messagingTemplate.convertAndSend("/topic/rooms/"+roomId+"/players",room.getPlayers());
+        messagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/players", room.getPlayers());
     }
 
     public void removePlayer(String playerSessionId, String roomId) {
         Room room = rooms.get(roomId);
         room.removePlayer(playerSessionId);
-        messagingTemplate.convertAndSend("/topic/rooms/"+roomId+"/players",room.getPlayers() );
+        messagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/players", room.getPlayers());
     }
 
     public Game getGame(String roomId) {
@@ -126,7 +117,7 @@ public class RoomService {
 
 
 //    public void start(String gameId){
-//        TicTacToe toe = new TicTacToe();
+//        TicTacToeGameEngine toe = new TicTacToeGameEngine();
 //        toe.setId(gameId);
 //        rooms.put(gameId,toe);
 //    }

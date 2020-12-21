@@ -34,7 +34,7 @@
 //
 //    @LocalServerPort
 //    private int port;
-//    private CompletableFuture<TicTacToe> completableFuture;
+//    private CompletableFuture<TicTacToeGameEngine> completableFuture;
 //    WebSocketStompClient stompClient;
 //    String URL = "ws://localhost:" + port + "/ws";
 //
@@ -48,14 +48,14 @@
 //    @Test
 //    public void smokeTest() throws InterruptedException, ExecutionException, TimeoutException {
 //        StompSession stompSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {}).get(10, SECONDS);
-//        Move move = new Move(1,1,FieldContent.O);
+//        TicTacToeMove move = new TicTacToeMove(1,1,FieldContent.O);
 //
 //        stompSession.subscribe(SUBSCRIBE_TTT, new TicTacToeStompFrameHandler());
 //        stompSession.send(SEND_MESSAGE_ENDPOINT, move);
 //
-//        TicTacToe expectedGameState = new TicTacToe();
+//        TicTacToeGameEngine expectedGameState = new TicTacToeGameEngine();
 //        expectedGameState.makeMove(move);
-//        TicTacToe gameAfterMove = completableFuture.get(10, SECONDS);
+//        TicTacToeGameEngine gameAfterMove = completableFuture.get(10, SECONDS);
 //
 //        assertThat(gameAfterMove).isEqualTo(expectedGameState);
 //
@@ -65,20 +65,20 @@
 //    public void smokeTest_2_users() throws InterruptedException, ExecutionException, TimeoutException {
 //        StompSession userSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {}).get(10, SECONDS);
 //        StompSession otherUserSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {}).get(10, SECONDS);
-//        Move move = new Move(1,1,FieldContent.O);
+//        TicTacToeMove move = new TicTacToeMove(1,1,FieldContent.O);
 //
 //        userSession.subscribe(SUBSCRIBE_TTT, new TicTacToeStompFrameHandler());
 //        userSession.send(SEND_MESSAGE_ENDPOINT, move);
 //
-//        TicTacToe expectedGameState = new TicTacToe();
+//        TicTacToeGameEngine expectedGameState = new TicTacToeGameEngine();
 //        expectedGameState.makeMove(move);
-//        TicTacToe gameAfterMove = completableFuture.get(10, SECONDS);
+//        TicTacToeGameEngine gameAfterMove = completableFuture.get(10, SECONDS);
 //
 //        assertThat(gameAfterMove).isEqualTo(expectedGameState);
 //
-//        Move move2 = new Move(1,1,FieldContent.X);
+//        TicTacToeMove move2 = new TicTacToeMove(1,1,FieldContent.X);
 //        userSession.send(SEND_MESSAGE_ENDPOINT, move2);
-//        TicTacToe gameAfterMov2e = completableFuture.get(10, SECONDS);
+//        TicTacToeGameEngine gameAfterMov2e = completableFuture.get(10, SECONDS);
 //        System.out.println(gameAfterMov2e);
 //    }
 //
@@ -94,13 +94,13 @@
 //        @Override
 //        public Type getPayloadType(StompHeaders stompHeaders) {
 //            System.out.println(stompHeaders.toString());
-//            return TicTacToe.class;
+//            return TicTacToeGameEngine.class;
 //        }
 //
 //        @Override
 //        public void handleFrame(StompHeaders stompHeaders, Object o) {
-//            System.out.println((TicTacToe) o);
-//            completableFuture.complete((TicTacToe) o);
+//            System.out.println((TicTacToeGameEngine) o);
+//            completableFuture.complete((TicTacToeGameEngine) o);
 //        }
 //    }
 //}

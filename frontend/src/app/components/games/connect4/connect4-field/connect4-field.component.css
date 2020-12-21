@@ -1,0 +1,27 @@
+div {
+  display: block;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 0;
+  margin: 5px;
+  background: #bbb;
+}
+div:hover {
+  filter: brightness(75%);
+}
+/* no focus rings by default... focus borders get added via js */
+div:focus {
+  outline: 0;
+}
+div::-moz-focus-inner {
+  border: 0;
+}
+div.red {
+  background: #ad0505;
+  background: linear-gradient(to bottom, #ff1616 0%,#ad0505 100%);
+}
+div.black {
+  background: #000;
+  background: linear-gradient(to bottom, #333 0%,#000000 100%);
+}

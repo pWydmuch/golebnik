@@ -1,23 +1,16 @@
 package pl.wydmuch.dovecot.games.tictactoe;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.*;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.wydmuch.dovecot.games.tictactoe.Field.FieldContent;
-import pl.wydmuch.dovecot.room.RoomService;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import pl.wydmuch.dovecot.games.tictactoe.engine.Field.FieldContent;
 
 @Controller
 @CrossOrigin("*")
 public class TicTacToeController {
 
-//    private TicTacToe game;
+//    private TicTacToeGameEngine game;
 
 
 
@@ -26,7 +19,7 @@ public class TicTacToeController {
 
 
     public TicTacToeController(SimpMessagingTemplate simpMessagingTemplate) {
-//        game = new TicTacToe();
+//        game = new TicTacToeGameEngine();
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -34,8 +27,8 @@ public class TicTacToeController {
 
 //    @MessageMapping("/ttt/{gameId}")
 //    @SendTo("/topic/ttt/{gameId}")
-//    public GameDto makeMove(@Payload Move move,@DestinationVariable String gameId, SimpMessageHeaderAccessor  headerAccessor){
-//        TicTacToe game = gameService.getGame(gameId);
+//    public TicTacToeGameState makeMove(@Payload TicTacToeMove move,@DestinationVariable String gameId, SimpMessageHeaderAccessor  headerAccessor){
+//        TicTacToeGameEngine game = gameService.getGame(gameId);
 //        System.out.println("Last: "+ game.getLastAddedSign());
 //        System.out.println(headerAccessor.getSessionId());
 //        FieldContent  playerSign = (FieldContent) headerAccessor.getSessionAttributes().get("sign");
@@ -54,7 +47,7 @@ public class TicTacToeController {
 //        move.setPlayerSign(playerSign);
 //        game.makeMove(move);
 //        System.out.println("Room sent " + game);
-//        GameDto gameDto = GameToDtoConverter.convertToDto(game);
+//        TicTacToeGameState gameDto = GameToGameStateConverter.convertToDto(game);
 //        return gameDto;
 //    }
 
@@ -62,9 +55,9 @@ public class TicTacToeController {
 
 //    @DeleteMapping("/game")
 //    @ResponseBody
-//    public GameDto resetGame(){
-//        game = new TicTacToe();
-//        return GameToDtoConverter.convertToDto(game);
+//    public TicTacToeGameState resetGame(){
+//        game = new TicTacToeGameEngine();
+//        return GameToGameStateConverter.convertToDto(game);
 //    }
 
 //

@@ -1,7 +1,7 @@
 package pl.wydmuch.dovecot.room;
 
-import pl.wydmuch.dovecot.gameplay.Game;
-import pl.wydmuch.dovecot.games.tictactoe.TicTacToe;
+
+import pl.wydmuch.dovecot.games.Game;
 
 import java.util.*;
 
@@ -19,6 +19,12 @@ public class Room {
         for(int i =0;i<neededPlayersNumber;i++){
             players.add(null);
         }
+    }
+
+    public TicTacToePlayer getPlayer(String playerId){
+        return players.stream().filter(p->p.getSessionId().equals(playerId))
+                .findFirst()
+                .orElseThrow(()->new RuntimeException("There's no such a player"));
     }
 
     public String getId() {
@@ -56,11 +62,11 @@ public class Room {
         players.remove(player);
     }
 
-    public TicTacToe getGame() {
+    public Game getGame() {
         return game;
     }
 
-    public void setGame(TicTacToe game) {
+    public void setGame(Game game) {
         this.game = game;
     }
 

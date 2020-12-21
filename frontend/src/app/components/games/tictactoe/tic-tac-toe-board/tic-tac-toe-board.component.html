@@ -1,0 +1,13 @@
+<div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+  <div class="container">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <div *ngFor="let row of board, let i = index" class="row">
+        <app-tic-tac-toe-field *ngFor="let field of row, let j = index" [winColor]="field.inWinningLine" (clickChild)="handleFieldClick(i,j)" [value]=field.fieldContent></app-tic-tac-toe-field>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="exceptionMessage">
+  {{exceptionMessage}}
+</div>
+<button (click)="handleReset()">Reset The Game</button>
