@@ -1,7 +1,7 @@
 package pl.wydmuch.dovecot.games.connect4;
 
 import org.springframework.stereotype.Service;
-import pl.wydmuch.dovecot.games.Game;
+import pl.wydmuch.dovecot.games.GameManager;
 import pl.wydmuch.dovecot.games.GameState;
 import pl.wydmuch.dovecot.games.Move;
 
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Service
-public class Connect4GameEngine implements Game {
+public class Connect4GameManagerEngine  {
     private Field[][] board;
     private static final int ROW_NR = 7;
     private static final int COLUMN_NR = 6;
@@ -19,7 +19,7 @@ public class Connect4GameEngine implements Game {
     private int lastColumn;
 
 
-    public Connect4GameEngine() {
+    public Connect4GameManagerEngine() {
         board = new Field[ROW_NR][COLUMN_NR];
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
@@ -32,7 +32,7 @@ public class Connect4GameEngine implements Game {
         return board;
     }
 
-    @Override
+
     public void makeMove(Move move) {
         Connect4Move connect4Move = (Connect4Move) move;
         int column = connect4Move.getColumn();
@@ -45,12 +45,12 @@ public class Connect4GameEngine implements Game {
         lastAddedSign = playerSign;
     }
 
-    @Override
+
     public GameState getState() {
         return null;
     }
 
-    @Override
+
     public boolean firstMoveWasMade() {
         return lastAddedSign != null;
     }

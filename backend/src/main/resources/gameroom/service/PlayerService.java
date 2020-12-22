@@ -34,7 +34,7 @@ public class PlayerService extends AbstractWebSocketService {
 	private int numOfPlayer;
 
 	public String addPlayer(String sessionId, String name) {
-		logger.info("addPlayer, sessionId: ", sessionId);
+		logger.info("addRoomUser, sessionId: ", sessionId);
 		Map<String, AbstractGame> waitingGameMap = gameRepository.getWaitingGameMap();
 		AbstractGame abstractGame = null;
 		abstractGame = waitingGameMap.values().stream().filter(g -> g.getJoinCount().getAndIncrement() <= numOfPlayer).findFirst().orElse(null);
@@ -47,7 +47,7 @@ public class PlayerService extends AbstractWebSocketService {
 	}
 
 	public String addPlayer(String sessionId, String gameId, String name) {
-		logger.info("addPlayer, sessionId: ", sessionId, ", gameId: ", gameId, ", name: ", name);
+		logger.info("addRoomUser, sessionId: ", sessionId, ", gameId: ", gameId, ", name: ", name);
 		AbstractGame abstractGame = gameRepository.getWaitingGame(gameId);
 		if (abstractGame != null && abstractGame.getJoinCount().incrementAndGet() <= numOfPlayer)
 			synchronized (abstractGame) {
@@ -61,7 +61,7 @@ public class PlayerService extends AbstractWebSocketService {
 	private String addPlayer(Player player, AbstractGame abstractGame) {
 		String gameId = null;
 		int i = 0;
-		logger.info("addPlayer, player: ", player, ", game: ", abstractGame);
+		logger.info("addRoomUser, player: ", player, ", game: ", abstractGame);
 		if (abstractGame == null)
 			return null;
 		Player[] players = abstractGame.getPlayers();
@@ -79,7 +79,7 @@ public class PlayerService extends AbstractWebSocketService {
 	}
 
 	public void removePlayer(String sessionId) {
-		logger.info("removePlayer, sessionId: ", sessionId);
+		logger.info("removeRoomUser, sessionId: ", sessionId);
 		Map<String, String> playerGameMap = playerRepository.getPlayerGameMap();
 		if (!playerGameMap.containsKey(sessionId))
 			return;
@@ -96,7 +96,7 @@ public class PlayerService extends AbstractWebSocketService {
 	}
 
 	private void removePlayer(String sessionId, Boolean isWaiting, AbstractGame abstractGame) {
-		logger.info("removePlayer, sessionId: ", sessionId, ", isWaiting: ", isWaiting, ", abstractGame: ", abstractGame);
+		logger.info("removeRoomUser, sessionId: ", sessionId, ", isWaiting: ", isWaiting, ", abstractGame: ", abstractGame);
 		Player[] players;
 		String gameId = abstractGame.getId();
 		playerRepository.removePlayer(sessionId);

@@ -1,10 +1,10 @@
 package pl.wydmuch.dovecot.games.tictactoe;
 
-import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import pl.wydmuch.dovecot.games.tictactoe.engine.Field.FieldContent;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @CrossOrigin("*")
@@ -28,7 +28,7 @@ public class TicTacToeController {
 //    @MessageMapping("/ttt/{gameId}")
 //    @SendTo("/topic/ttt/{gameId}")
 //    public TicTacToeGameState makeMove(@Payload TicTacToeMove move,@DestinationVariable String gameId, SimpMessageHeaderAccessor  headerAccessor){
-//        TicTacToeGameEngine game = gameService.getGame(gameId);
+//        TicTacToeGameEngine game = gameService.getGameManager(gameId);
 //        System.out.println("Last: "+ game.getLastAddedSign());
 //        System.out.println(headerAccessor.getSessionId());
 //        FieldContent  playerSign = (FieldContent) headerAccessor.getSessionAttributes().get("sign");

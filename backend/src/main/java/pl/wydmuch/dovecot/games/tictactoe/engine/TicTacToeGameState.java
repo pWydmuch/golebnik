@@ -2,7 +2,7 @@ package pl.wydmuch.dovecot.games.tictactoe.engine;
 import pl.wydmuch.dovecot.games.GameState;
 import pl.wydmuch.dovecot.games.tictactoe.engine.Field;
 
-public class TicTacToeGameState implements GameState {
+class TicTacToeGameState implements GameState {
     private Field[][] board;
 
     private boolean isWinner;

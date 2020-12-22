@@ -84,7 +84,7 @@ export class RoomComponent implements OnInit {
     console.log(this.players);
     for (let i = 0; i < this.playersNumber; i++) {
       console.log("players sessino"+this.players[i])
-      this.playerButtonTexts[i] = this.players[i] ? this.players[i].sessionId : "sit down";
+      this.playerButtonTexts[i] = this.players[i] ? this.players[i].name : "sit down";
     }
   }
 }

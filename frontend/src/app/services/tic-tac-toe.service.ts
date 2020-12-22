@@ -13,8 +13,6 @@ export class TicTacToeService {
 
   constructor(private http: HttpClient) { }
 
-
-
   resetGame(roomId : string): Observable<TicTacToeGameState> {
    return this.http.delete<TicTacToeGameState>(`${this.url}/${roomId}/game`);
   }

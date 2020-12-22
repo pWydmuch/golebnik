@@ -2,7 +2,7 @@ package pl.wydmuch.dovecot.games.tictactoe.engine;
 
 import java.util.Arrays;
 
-public class Field {
+class Field {
     private FieldContent fieldContent = FieldContent.EMPTY;
     private boolean isInWinningLine = false;
 

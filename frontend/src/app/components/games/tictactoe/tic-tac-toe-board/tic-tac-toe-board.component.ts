@@ -45,7 +45,7 @@ export class TicTacToeBoardComponent implements OnInit {
   }
 
   onMessageReceived(payload) {
-    console.log('received');
+    console.log(payload);
     const message = JSON.parse(payload.body);
     console.log(message);
     this.gameState = message;

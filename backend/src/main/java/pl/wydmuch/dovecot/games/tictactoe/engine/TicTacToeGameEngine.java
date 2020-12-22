@@ -4,7 +4,7 @@ package pl.wydmuch.dovecot.games.tictactoe.engine;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class TicTacToeGameEngine{
+public class TicTacToeGameEngine {
 
     private Field[][] board;
     private FieldContent lastAddedSign = null;
@@ -35,7 +35,7 @@ public class TicTacToeGameEngine{
     }
 
 
-    public boolean firstMoveWasMade(){
+    public boolean firstMoveWasMade() {
         return lastAddedSign != null;
     }
 
@@ -47,7 +47,6 @@ public class TicTacToeGameEngine{
     public FieldContent getWinnerSign() {
         return isGameWon() ? lastAddedSign : null;
     }
-
 
 
     public boolean isGameEnded() {
@@ -161,38 +160,38 @@ public class TicTacToeGameEngine{
         return availableSigns;
     }
 
-    public class FieldAlreadyTakenException extends RuntimeException {
-        public FieldAlreadyTakenException() {
+    static class FieldAlreadyTakenException extends RuntimeException {
+        FieldAlreadyTakenException() {
         }
 
-        public FieldAlreadyTakenException(String message) {
+        FieldAlreadyTakenException(String message) {
             super(message);
         }
     }
 
-    public class RepeatedSignException extends RuntimeException {
-        public RepeatedSignException() {
+    static class RepeatedSignException extends RuntimeException {
+        RepeatedSignException() {
         }
 
-        public RepeatedSignException(String message) {
+        RepeatedSignException(String message) {
             super(message);
         }
     }
 
-    public class EmptyFieldSettingException extends RuntimeException {
-        public EmptyFieldSettingException() {
+    static class EmptyFieldSettingException extends RuntimeException {
+        EmptyFieldSettingException() {
         }
 
-        public EmptyFieldSettingException(String message) {
+        EmptyFieldSettingException(String message) {
             super(message);
         }
     }
 
-    public class GameAlreadyEndedException extends RuntimeException {
-        public GameAlreadyEndedException() {
+    static class GameAlreadyEndedException extends RuntimeException {
+        GameAlreadyEndedException() {
         }
 
-        public GameAlreadyEndedException(String message) {
+        GameAlreadyEndedException(String message) {
             super(message);
         }
     }

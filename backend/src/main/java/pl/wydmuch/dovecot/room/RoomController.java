@@ -7,9 +7,8 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeGameState;
+import pl.wydmuch.dovecot.games.GameState;
 import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeMove;
-
 
 import java.util.List;
 import java.util.Set;
@@ -18,13 +17,17 @@ import java.util.Set;
 @CrossOrigin("*")
 public class RoomController {
 
+    private final RoomService roomService;
+
     @Autowired
-    RoomService roomService;
+    public RoomController(RoomService roomService) {
+        this.roomService = roomService;
+    }
 
     @PostMapping("/rooms")
     @ResponseBody
     public void createRoom(){
-        roomService.createRoom();
+        roomService.createRoom("TicTacToe");
     }
 
     @DeleteMapping("/rooms/{roomId}")
@@ -35,11 +38,11 @@ public class RoomController {
 
 //    @GetMapping("/rooms/{roomId}")
 //    @ResponseBody
-//    public TicTacToeGameState getGame(@PathVariable String roomId){
+//    public TicTacToeGameState getGameManager(@PathVariable String roomId){
 //
 //    }
     @SubscribeMapping("/ttt/{roomId}")
-    public TicTacToeGameState onSubscription(@DestinationVariable String roomId){
+    public GameState onSubscription(@DestinationVariable String roomId){
         System.out.println("Subbb");
         return roomService.onSubscription(roomId);
     }
@@ -53,7 +56,7 @@ public class RoomController {
     @ResponseBody
     public void addPlayer(@PathVariable String roomId, @PathVariable String playerSessionId,@RequestParam int playerNumber){
         System.out.println("added " + playerNumber );
-        roomService.addPlayer(playerSessionId,roomId,"jagoda",playerNumber);
+        roomService.addPlayer(playerSessionId,roomId,playerNumber);
     }
 
     @DeleteMapping("rooms/{roomId}/players/{playerSessionId}")
@@ -65,8 +68,8 @@ public class RoomController {
 
     @GetMapping("rooms/{roomId}/players")
     @ResponseBody
-    public List<TicTacToePlayer> getRoomSitPlayers(@PathVariable String roomId){
-        return roomService.getSitPlayers(roomId);
+    public List<RoomUser> getRoomSitPlayers(@PathVariable String roomId){
+        return roomService.getRoomUsers(roomId);
     }
 
     @MessageMapping("/rooms")
