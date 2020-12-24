@@ -6,6 +6,7 @@ import {Client, Message} from 'stompjs';
 import {ChatComponent} from '../chat/chat/chat.component';
 import { Location } from '@angular/common';
 import {TicTacToeBoardComponent} from "../games/tictactoe/tic-tac-toe-board/tic-tac-toe-board.component";
+import {Connect4BoardComponent} from "../games/connect4/connect4-board/connect4-board.component";
 
 
 @Component({
@@ -19,7 +20,7 @@ export class RoomComponent implements OnInit {
   private playerSessionId: string;
   private players: any[];
   private playersNumber: number;
-  @ViewChild(TicTacToeBoardComponent,  {static: false}) boardComp: TicTacToeBoardComponent;
+  @ViewChild(Connect4BoardComponent,  {static: false}) boardComp: Connect4BoardComponent;
   @ViewChild(ChatComponent,  {static: false}) chatComp: ChatComponent;
   playerButtonTexts: string[];
 

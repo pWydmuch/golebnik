@@ -1,4 +1,4 @@
-package pl.wydmuch.dovecot.room;
+package pl.wydmuch.dovecot.websocket.gameroom.room;
 
 import java.util.Set;
 

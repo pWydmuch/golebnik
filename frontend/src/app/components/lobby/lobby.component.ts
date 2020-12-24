@@ -32,7 +32,7 @@ export class LobbyComponent implements OnInit {
   }
 
   createRoom() {
-    this.gamesService.createRoom().subscribe();
+    this.gamesService.createRoom("Connect4").subscribe();
   }
 
 

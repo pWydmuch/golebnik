@@ -25,3 +25,7 @@ div.black {
   background: #000;
   background: linear-gradient(to bottom, #333 0%,#000000 100%);
 }
+
+.winner {
+  border: dotted 1px black;
+}

@@ -1,4 +1,4 @@
-package pl.wydmuch.dovecot.games;
+package pl.wydmuch.dovecot.websocket.gameroom.game.api;
 
 
 

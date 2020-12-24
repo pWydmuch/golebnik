@@ -7,9 +7,8 @@ class Field {
     private boolean isInWinningLine = false;
 
     boolean allHaveSameSign(Field... otherFields) {
-        boolean allInLineSameSign = fieldContent != FieldContent.EMPTY && Arrays.stream(otherFields).map(Field::getFieldContent).allMatch(fieldContent -> fieldContent == this.fieldContent);
-        if (allInLineSameSign) markWinningLine(otherFields);
-        return allInLineSameSign;
+        if (isWinningLine(otherFields)) markWinningLine(otherFields);
+        return isAllInLineSameSign(otherFields);
     }
 
     public boolean isInWinningLine() {
@@ -26,6 +25,17 @@ class Field {
 
     public void setFieldContent(FieldContent fieldContent) {
         this.fieldContent = fieldContent;
+    }
+
+    private boolean isWinningLine(Field... otherFields) {
+        boolean allInLineSameSign = isAllInLineSameSign(otherFields);
+        return fieldContent != FieldContent.EMPTY && allInLineSameSign;
+    }
+
+    private boolean isAllInLineSameSign(Field[] otherFields) {
+        return Arrays.stream(otherFields)
+                .map(Field::getFieldContent)
+                .allMatch(fieldContent -> fieldContent == this.fieldContent);
     }
 
     private void markWinningLine(Field... otherFields) {

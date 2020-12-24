@@ -17,8 +17,8 @@ export class RoomService {
     return this.http.get<string[]>(this.url);
   }
 
-  createRoom(): Observable<any> {
-    return this.http.post(this.url, null);
+  createRoom(gameName: string): Observable<any> {
+    return this.http.post(`${this.url}/${gameName}`, null);
   }
 
   removeRoom(roomId: string): Observable<any> {

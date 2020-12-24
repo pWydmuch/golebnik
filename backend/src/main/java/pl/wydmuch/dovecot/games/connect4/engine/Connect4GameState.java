@@ -1,7 +1,8 @@
-package pl.wydmuch.dovecot.games.tictactoe.engine;
+package pl.wydmuch.dovecot.games.connect4.engine;
+
 import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
 
-class TicTacToeGameState implements GameState {
+public class Connect4GameState implements GameState {
     private Field[][] board;
 
     private boolean isWinner;

@@ -1,4 +1,4 @@
-package pl.wydmuch.dovecot.games.connect4;
+package pl.wydmuch.dovecot.games.connect4.engine;
 
 public class Field {
     private FieldContent fieldContent = FieldContent.EMPTY;
@@ -13,5 +13,7 @@ public class Field {
         this.fieldContent = fieldContent;
     }
 
-
+    public void setInWinningLine(boolean inWinningLine) {
+        isInWinningLine = inWinningLine;
+    }
 }

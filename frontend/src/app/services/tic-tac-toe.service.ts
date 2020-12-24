@@ -7,14 +7,14 @@ import {TicTacToeGameState} from "../components/games/tictactoe/model/tic-tac-to
 @Injectable({
   providedIn: 'root'
 })
-export class TicTacToeService {
+export class TicTacToeService<C> {
 
   private url: string = environment.basicUrl + '/rooms';
 
   constructor(private http: HttpClient) { }
 
-  resetGame(roomId : string): Observable<TicTacToeGameState> {
-   return this.http.delete<TicTacToeGameState>(`${this.url}/${roomId}/game`);
+  resetGame(roomId : string): Observable<C> {
+   return this.http.delete<C>(`${this.url}/${roomId}/game`);
   }
 
 }

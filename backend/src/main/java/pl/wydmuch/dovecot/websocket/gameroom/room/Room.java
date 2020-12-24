@@ -1,10 +1,8 @@
-package pl.wydmuch.dovecot.room;
+package pl.wydmuch.dovecot.websocket.gameroom.room;
 
 
-import pl.wydmuch.dovecot.games.GameManager;
-import pl.wydmuch.dovecot.games.Player;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameManager;
 
-import javax.management.RuntimeErrorException;
 import java.util.*;
 
 public class Room {

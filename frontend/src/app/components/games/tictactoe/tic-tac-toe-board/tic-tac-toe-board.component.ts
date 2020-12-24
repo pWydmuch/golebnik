@@ -22,7 +22,7 @@ export class TicTacToeBoardComponent implements OnInit {
   private gameState: TicTacToeGameState;
   private exceptionMessage: string;
 
-  constructor(private ticTacToeService: TicTacToeService,
+  constructor(private ticTacToeService: TicTacToeService<TicTacToeGameState>,
               private toastr: ToastrService) {
 
   }

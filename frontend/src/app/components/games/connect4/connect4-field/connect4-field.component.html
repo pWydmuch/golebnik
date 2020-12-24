@@ -1,1 +1,1 @@
-<div [class]="winColor ? 'winner' : ''" (click)="handleClick()">{{value!='EMPTY' ? value : ''}}</div>
+<div [ngClass]="getPlayerClass(value)" [class]="winColor ? 'winner' : ''" (click)="handleClick()"></div>

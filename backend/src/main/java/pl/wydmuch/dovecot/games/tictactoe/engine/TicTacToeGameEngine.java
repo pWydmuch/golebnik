@@ -1,26 +1,26 @@
 package pl.wydmuch.dovecot.games.tictactoe.engine;
 
 
+import pl.wydmuch.dovecot.games.GameEngine;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+
 import java.util.*;
 import java.util.stream.Stream;
 
-public class TicTacToeGameEngine {
+public class TicTacToeGameEngine implements GameEngine {
 
     private Field[][] board;
     private FieldContent lastAddedSign = null;
-    private List<FieldContent> availableSigns;
     private static final int ROW_NR = 3;
     private static final int COLUMN_NR = 3;
 
     public TicTacToeGameEngine() {
-        availableSigns = new ArrayList<>();
-        availableSigns.add(FieldContent.O);
-        availableSigns.add(FieldContent.X);
         initializeBoard();
     }
 
-
-    public void makeMove(TicTacToeMove ticTacToeMove) {
+    @Override
+    public void makeMove(Move move) {
+        TicTacToeMove ticTacToeMove = (TicTacToeMove) move;
         checkIfMoveIsInvalid(ticTacToeMove);
         int row = ticTacToeMove.getRow();
         int column = ticTacToeMove.getColumn();
@@ -29,41 +29,42 @@ public class TicTacToeGameEngine {
         lastAddedSign = playerSign;
     }
 
-
+    @Override
     public TicTacToeGameState getState() {
-        return GameToGameStateConverter.convertToDto(this);
+        TicTacToeGameState ticTacToeGameState = new TicTacToeGameState();
+        ticTacToeGameState.setBoard(board);
+        ticTacToeGameState.setIsWinner(isGameWon());
+        ticTacToeGameState.setIsDraw(isDraw());
+        return ticTacToeGameState;
     }
 
-
+    @Override
     public boolean firstMoveWasMade() {
         return lastAddedSign != null;
     }
 
-
-    public FieldContent getLastAddedSign() {
-        return lastAddedSign;
-    }
-
-    public FieldContent getWinnerSign() {
-        return isGameWon() ? lastAddedSign : null;
-    }
-
-
+    @Override
     public boolean isGameEnded() {
         return isDraw() || isGameWon();
     }
 
-    public boolean isDraw() {
+//    public FieldContent getLastAddedSign() {
+//        return lastAddedSign;
+//    }
+
+//    public FieldContent getWinnerSign() {
+//        return isGameWon() ? lastAddedSign : null;
+//    }
+
+
+    private boolean isDraw() {
         return boardIsFull() && !isGameWon();
     }
 
-    public boolean isGameWon() {
+    private boolean isGameWon() {
         return isHorizontallyWon() || isVerticallyWon() || isDiagonallyWon();
     }
 
-    public Field[][] getBoard() {
-        return board;
-    }
 
     private void initializeBoard() {
         board = new Field[ROW_NR][COLUMN_NR];
@@ -154,10 +155,6 @@ public class TicTacToeGameEngine {
         return "TicTacToeGameEngine{" +
                 "board=" + Arrays.toString(board) +
                 '}';
-    }
-
-    public List<FieldContent> getAvailableSigns() {
-        return availableSigns;
     }
 
     static class FieldAlreadyTakenException extends RuntimeException {

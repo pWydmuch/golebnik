@@ -1,18 +1,12 @@
 package pl.wydmuch.dovecot.games;
 
-import pl.wydmuch.dovecot.games.connect4.Connect4GameManagerEngine;
-import pl.wydmuch.dovecot.games.tictactoe.TicTacToeGameManager;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameManager;
 
 
 public class GameManagerFactory {
     public static GameManager createGame(String gameName) {
-        switch (gameName) {
-            case "TicTacToe":
-                return new TicTacToeGameManager();
-//            case "Connect4":
-//                return new Connect4GameManagerEngine();
-            default:
-                throw new RuntimeException("There is no such a game as: " + gameName);
-        }
+        if (!gameName.equals("TicTacToe") && !gameName.equals("Connect4"))
+            throw new RuntimeException("There is no such a game as: " + gameName);
+        return new GenericGameManager(gameName);
     }
 }
