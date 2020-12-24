@@ -2,7 +2,7 @@ package pl.wydmuch.dovecot.games.tictactoe.engine;
 
 
 import pl.wydmuch.dovecot.games.GameEngine;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.games.Move;
 
 import java.util.*;
 import java.util.stream.Stream;

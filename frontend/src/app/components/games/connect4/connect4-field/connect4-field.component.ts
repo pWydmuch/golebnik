@@ -24,10 +24,11 @@ export class Connect4FieldComponent implements OnInit {
     this.clickChild.emit();
   }
 
-  getPlayerClass(value) {
+  getFieldClass() {
     return {
       'red': this.value === Connect4FieldContentType.RED,
-      'black': this.value === Connect4FieldContentType.BLACK
+      'black': this.value === Connect4FieldContentType.BLACK,
+      'winner': this.winColor
     };
   }
 }

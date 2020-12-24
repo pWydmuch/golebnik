@@ -1,6 +1,6 @@
 package pl.wydmuch.dovecot.games.connect4.engine;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.games.Move;
 
 public class Connect4Move implements Move {
     private int column;

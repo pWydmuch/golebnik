@@ -1,11 +1,10 @@
 package pl.wydmuch.dovecot.games;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
 public interface GameEngine {
     boolean isGameEnded();
     void makeMove(Move move);
-    GameState getState();
+    RoomActivityState getState();
     boolean firstMoveWasMade();
 }

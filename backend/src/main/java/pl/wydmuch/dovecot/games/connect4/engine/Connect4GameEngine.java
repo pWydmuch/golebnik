@@ -1,8 +1,8 @@
 package pl.wydmuch.dovecot.games.connect4.engine;
 
 import pl.wydmuch.dovecot.games.GameEngine;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
+import pl.wydmuch.dovecot.games.Move;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +52,7 @@ public class Connect4GameEngine implements GameEngine {
     }
 
 
-    public GameState getState() {
+    public RoomActivityState getState() {
         Connect4GameState connect4GameState = new Connect4GameState();
         connect4GameState.setBoard(board);
         connect4GameState.setIsWinner(isGameWon());

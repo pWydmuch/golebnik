@@ -2,7 +2,7 @@ package pl.wydmuch.dovecot.games.tictactoe;
 
 import pl.wydmuch.dovecot.games.AbstractPlayer;
 import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeMove;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.games.Move;
 import pl.wydmuch.dovecot.games.tictactoe.engine.FieldContent;
 
 public class TicTacToePlayer extends AbstractPlayer {

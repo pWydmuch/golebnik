@@ -54,7 +54,7 @@
 //        stompSession.send(SEND_MESSAGE_ENDPOINT, move);
 //
 //        TicTacToeGameEngine expectedGameState = new TicTacToeGameEngine();
-//        expectedGameState.makeMove(move);
+//        expectedGameState.doAction(move);
 //        TicTacToeGameEngine gameAfterMove = completableFuture.get(10, SECONDS);
 //
 //        assertThat(gameAfterMove).isEqualTo(expectedGameState);
@@ -71,7 +71,7 @@
 //        userSession.send(SEND_MESSAGE_ENDPOINT, move);
 //
 //        TicTacToeGameEngine expectedGameState = new TicTacToeGameEngine();
-//        expectedGameState.makeMove(move);
+//        expectedGameState.doAction(move);
 //        TicTacToeGameEngine gameAfterMove = completableFuture.get(10, SECONDS);
 //
 //        assertThat(gameAfterMove).isEqualTo(expectedGameState);

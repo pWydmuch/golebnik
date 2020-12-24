@@ -1,9 +1,8 @@
 package pl.wydmuch.dovecot.games;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Player;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityParticipant;
 
-public abstract class AbstractPlayer extends Player {
+public abstract class AbstractPlayer extends RoomActivityParticipant {
 
     public AbstractPlayer(String playerName, int playerNumber) {
         super(playerName, playerNumber);

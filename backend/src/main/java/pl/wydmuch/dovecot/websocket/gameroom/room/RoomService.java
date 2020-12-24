@@ -3,39 +3,42 @@ package pl.wydmuch.dovecot.websocket.gameroom.room;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Service;
 import pl.wydmuch.dovecot.games.GameManagerFactory;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameManager;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityManager;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
 
     private Map<String, Room> rooms = new HashMap<>();
 
-    public Set<String> getRoomsIds() {
-        return rooms.keySet();
+    public List<RoomDto> getRoomDtos() {
+        return rooms.values()
+                .stream()
+                .map(RoomDto::new)
+                .collect(Collectors.toList());
     }
 
-    public void makeMove(String roomId, Move move, SimpMessageHeaderAccessor headerAccessor) {
+    public void doAction(String roomId, String action, SimpMessageHeaderAccessor headerAccessor) {
         Room room = rooms.get(roomId);
-        GameManager gameManager = room.getGameManager();
+        RoomActivityManager roomActivityManager = room.getRoomActivityManager();
         String playerSessionId = headerAccessor.getSessionId();
-        if (!gameManager.isGameStarted()) throw new RuntimeException("Game is not started yet");
-        if (!isRoomUserPlaying(playerSessionId, roomId)) throw new RuntimeException("You don't play");
-        gameManager.makeMove(move, playerSessionId);
+        if (!roomActivityManager.isActivityStarted()) throw new RuntimeException("Game is not started yet");
+        if (!isRoomUserWithName(playerSessionId, roomId)) throw new RuntimeException("You don't play");
+        roomActivityManager.doAction(action, playerSessionId);
     }
 
-    public GameState getGameState(String roomId){
+    public RoomActivityState getRoomActivityState(String roomId){
         Room room = rooms.get(roomId);
-        GameManager gameManager = room.getGameManager();
-        return gameManager.getGameState();
+        RoomActivityManager roomActivityManager = room.getRoomActivityManager();
+        return roomActivityManager.getActivityState();
     }
 
     public void createRoom(String gameName) {
-        GameManager gameManager = GameManagerFactory.createGame(gameName) ;
-        Room room = new Room(gameManager);
+        RoomActivityManager roomActivityManager = GameManagerFactory.createGame(gameName) ;
+        Room room = new Room(roomActivityManager);
         room.setId(UUID.randomUUID().toString());
         rooms.put(room.getId(), room);
     }
@@ -44,27 +47,27 @@ public class RoomService {
         rooms.remove(roomId);
     }
 
-    public void addPlayer(String playerSessionId, String roomId, int playerNumber) {
+    public void addRoomUser(String playerSessionId, String roomId, int playerNumber) {
         Room room = rooms.get(roomId);
         room.addRoomUser(playerSessionId, playerNumber);
     }
 
-    public void removePlayer(String playerSessionId, String roomId) {
+    public void removeRoomUser(String playerSessionId, String roomId) {
         Room room = rooms.get(roomId);
         room.removeRoomUser(playerSessionId);
     }
 
-    public GameManager getGame(String roomId) {
-        return rooms.get(roomId).getGameManager();
+    public RoomActivityManager getGame(String roomId) {
+        return rooms.get(roomId).getRoomActivityManager();
     }
 
-    public GameState onSubscription(String roomId) {
-        return rooms.get(roomId).getGameManager().getGameState();
+    public RoomActivityState onSubscription(String roomId) {
+        return rooms.get(roomId).getRoomActivityManager().getActivityState();
     }
 
-    public void resetGame(String roomId) {
-        GameManager manager = rooms.get(roomId).getGameManager();
-        manager.resetGame();
+    public void resetRoomActivity(String roomId) {
+        RoomActivityManager manager = rooms.get(roomId).getRoomActivityManager();
+        manager.resetActivity();
 
     }
 
@@ -72,9 +75,9 @@ public class RoomService {
         return rooms.get(roomId).getRoomUsers();
     }
 
-    private boolean isRoomUserPlaying(String playerSessionId, String roomId) {
+    private boolean isRoomUserWithName(String roomUserName, String roomId) {
         return rooms.get(roomId).getRoomUsers().stream()
                 .map(RoomUser::getName)
-                .anyMatch(s -> s.equals(playerSessionId));
+                .anyMatch(s -> s.equals(roomUserName));
     }
 }

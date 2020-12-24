@@ -1,8 +1,8 @@
 package pl.wydmuch.dovecot.games.connect4.engine;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
-public class Connect4GameState implements GameState {
+public class Connect4GameState implements RoomActivityState {
     private Field[][] board;
 
     private boolean isWinner;

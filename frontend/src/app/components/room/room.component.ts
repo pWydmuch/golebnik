@@ -1,10 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, Type, ViewChild} from '@angular/core';
 import {RoomService} from '../../services/room.service';
 import {ActivatedRoute} from '@angular/router';
 import {WebSocketService} from '../../services/web-socket.service';
-import {Client, Message} from 'stompjs';
+import {Client} from 'stompjs';
 import {ChatComponent} from '../chat/chat/chat.component';
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
+import {GameDirective} from "../games/game.directive";
+import {GameComponent} from "../games/game-component";
 import {TicTacToeBoardComponent} from "../games/tictactoe/tic-tac-toe-board/tic-tac-toe-board.component";
 import {Connect4BoardComponent} from "../games/connect4/connect4-board/connect4-board.component";
 
@@ -20,13 +22,12 @@ export class RoomComponent implements OnInit {
   private playerSessionId: string;
   private players: any[];
   private playersNumber: number;
-  @ViewChild(Connect4BoardComponent,  {static: false}) boardComp: Connect4BoardComponent;
-  @ViewChild(ChatComponent,  {static: false}) chatComp: ChatComponent;
+  @ViewChild(GameDirective, {static: true}) gameDirective: GameDirective;
+  @ViewChild(ChatComponent, {static: false}) chatComp: ChatComponent;
   playerButtonTexts: string[];
 
-
-
-  constructor(private webSocketService: WebSocketService,
+  constructor(private componentFactoryResolver: ComponentFactoryResolver,
+              private webSocketService: WebSocketService,
               private roomService: RoomService,
               private route: ActivatedRoute,
               private location: Location) {
@@ -36,20 +37,32 @@ export class RoomComponent implements OnInit {
   ngOnInit() {
     this.roomId = history.state.roomId;
     this.playersNumber = history.state.playersNumber;
+    const  activityManagerId = history.state.activityManagerId;
+    let gameType;
+    if (activityManagerId === "TicTacToe") gameType = TicTacToeBoardComponent;
+    if (activityManagerId === "Connect4") gameType = Connect4BoardComponent;
     this.playerButtonTexts = new Array(this.playersNumber).fill('sit down');
-    this.connect();
+    this.connect(gameType);
     this.roomService.getSitPlayers(this.roomId).subscribe(players => this.changePlayersButtonText(players));
   }
 
-  connect() {
+  connect(gameType: Type<any>) {
     this.stompClient.connect({}, () => {
-    this.playerSessionId = /\/([^\/]+)\/websocket/.exec((this.stompClient.ws as any)._transport.url)[1];
-    this.boardComp.onConnected(this.roomId, this.playerSessionId);
-    this.chatComp.onConnected(this.roomId, this.playerSessionId);
-    this.subscribeToPlayers();
+      this.playerSessionId = /\/([^\/]+)\/websocket/.exec((this.stompClient.ws as any)._transport.url)[1];
+      this.loadComponent(gameType)
+      this.chatComp.onConnected(this.roomId, this.playerSessionId);
+      this.subscribeToPlayers();
     }, this.onError);
   }
 
+  loadComponent(gameComponent: Type<any>) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(gameComponent);
+    const viewContainerRef = this.gameDirective.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent<GameComponent>(componentFactory);
+    componentRef.instance.stompClient = this.stompClient;
+    componentRef.instance.onConnected(this.roomId, this.playerSessionId);
+  }
 
   addPlayer(playerNumber: string) {
     console.log('add player');
@@ -67,12 +80,8 @@ export class RoomComponent implements OnInit {
     // connectingElement.style.color = 'red';
   }
 
-
-
-
   goBack() {
     this.location.back();
-    
   }
 
   private subscribeToPlayers() {

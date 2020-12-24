@@ -17,6 +17,7 @@ import { TicTacToeFieldComponent } from './components/games/tictactoe/tic-tac-to
 import { TicTacToeBoardComponent } from './components/games/tictactoe/tic-tac-toe-board/tic-tac-toe-board.component';
 import { Connect4FieldComponent } from './components/games/connect4/connect4-field/connect4-field.component';
 import {Connect4BoardComponent} from "./components/games/connect4/connect4-board/connect4-board.component";
+import { GameDirective } from './components/games/game.directive';
 
 
 
@@ -34,7 +35,8 @@ import {Connect4BoardComponent} from "./components/games/connect4/connect4-board
     TimesPipe,
     TicTacToeFieldComponent,
     TicTacToeBoardComponent,
-    Connect4FieldComponent
+    Connect4FieldComponent,
+    GameDirective
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import {Connect4BoardComponent} from "./components/games/connect4/connect4-board
     ToastrModule.forRoot(),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [Connect4BoardComponent,TicTacToeBoardComponent]
 })
 export class AppModule {
 }

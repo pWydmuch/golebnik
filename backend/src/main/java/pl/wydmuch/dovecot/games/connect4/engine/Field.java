@@ -13,7 +13,13 @@ public class Field {
         this.fieldContent = fieldContent;
     }
 
+    public boolean isInWinningLine() {
+        return isInWinningLine;
+    }
+
     public void setInWinningLine(boolean inWinningLine) {
         isInWinningLine = inWinningLine;
     }
+
+
 }

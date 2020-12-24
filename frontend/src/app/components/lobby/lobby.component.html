@@ -1,9 +1,10 @@
 <div>
   <ul>
-    <li *ngFor="let id of roomsIds">
-      <button class="btn btn-success my-sm-1" (click)="goToRoom(id)">Room {{id}}</button>
-      <div (click)="removeRoom(id)">X</div>
+    <li *ngFor="let dto of roomsDtos">
+      <button class="btn btn-success my-sm-1" (click)="goToRoom(dto.roomId)">Room {{dto.roomId}}</button>
+      <div (click)="removeRoom(dto.roomId)">X</div>
     </li>
   </ul>
 </div>
-<button class="btn btn-primary ml-sm-3" (click)="createRoom()">Create a room</button>
+<button class="btn btn-primary ml-sm-3" (click)="createRoom('Connect4')">Create a connect4 room</button>
+<button class="btn btn-primary ml-sm-3" (click)="createRoom('TicTacToe')">Create a ticTacToe room</button>

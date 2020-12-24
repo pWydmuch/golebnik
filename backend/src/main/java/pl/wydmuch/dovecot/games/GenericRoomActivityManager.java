@@ -1,21 +1,20 @@
 package pl.wydmuch.dovecot.games;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameManager;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityManager;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public  class GenericGameManager implements GameManager {
+public  class GenericRoomActivityManager implements RoomActivityManager {
     private List<AbstractPlayer> players;
     private static final int PLAYERS_NUMBER = 2;
     private GameEngine engine;
     private int startingPlayerIndex;
     private AbstractGameFactory abstractGameFactory;
 
-    public GenericGameManager(String gameName) {
+    public GenericRoomActivityManager(String gameName) {
         abstractGameFactory = AbstractGameFactoryFactory.createGameFactory(gameName);
         players = new ArrayList<>();
         for (int i = 0; i < PLAYERS_NUMBER; i++) {
@@ -24,51 +23,57 @@ public  class GenericGameManager implements GameManager {
     }
 
     @Override
-    public void createNewGame() {
+    public String getManagerId() {
+        return abstractGameFactory.getGameName();
+    }
+
+    @Override
+    public void createNewActivity() {
         if (allPlayersArePresent() && engine == null) {
             engine = abstractGameFactory.createGameEngine();
         }
     }
 
     @Override
-    public void resetGame() {
+    public void resetActivity() {
         engine = abstractGameFactory.createGameEngine();
         changeStaringPlayerIndex();
     }
 
     @Override
-    public void makeMove(Move move, String playerName) {
+    public void doAction(String action, String participantName) {
         if (engine.isGameEnded()) throw new RuntimeException("Game is finished");
-        checkIfPlayerCanMakeMove(playerName);
-        AbstractPlayer playerMakingMove = getPlayerWithName(playerName);
+        checkIfPlayerCanMakeMove(participantName);
+        AbstractPlayer playerMakingMove = getPlayerWithName(participantName);
+        Move move = abstractGameFactory.parseGameMove(action);
         playerMakingMove.makeMovePlayerSpecific(move);
         engine.makeMove(move);
     }
 
     @Override
-    public GameState getGameState() {
+    public RoomActivityState getActivityState() {
         return engine != null ? engine.getState() : abstractGameFactory.createGameEngine().getState();
     }
 
     @Override
-    public boolean isGameStarted() {
+    public boolean isActivityStarted() {
         return engine != null;
     }
 
     @Override
-    public int getPlayersNumber(){
+    public int getParticipantsNumber(){
         return PLAYERS_NUMBER;
     }
 
     @Override
-    public void addPlayer(String playerName, int playerNumber) {
-        AbstractPlayer player = abstractGameFactory.createPlayer(playerName,playerNumber);
-        players.set(playerNumber,player);
-        createNewGame();
+    public void addActivityParticipant(String participantName, int participantNumber) {
+        AbstractPlayer player = abstractGameFactory.createPlayer(participantName, participantNumber);
+        players.set(participantNumber,player);
+        createNewActivity();
     }
 
     @Override
-    public void removePlayer(String playerName) {
+    public void removeActivityParticipant(String playerName) {
         for (int i = 0; i < players.size(); i++) {
             AbstractPlayer player = players.get(i);
             if (player != null && player.getPlayerName().equals(playerName)) {

@@ -6,13 +6,14 @@ import {TicTacToeService} from "../../../../services/tic-tac-toe.service";
 import {ToastrService} from "ngx-toastr";
 import {Connect4GameState} from "../model/connect4-game-state";
 import {Connect4Move, PlayerSign} from "../model/connect4-move";
+import {GameComponent} from "../../game-component";
 
 @Component({
   selector: 'app-connect4-board',
   templateUrl: './connect4-board.component.html',
   styleUrls: ['./connect4-board.component.css']
 })
-export class Connect4BoardComponent implements OnInit {
+export class Connect4BoardComponent implements OnInit, GameComponent {
   private static readonly ROW_NR: number = 6;
   private static readonly COLUMN_NR: number = 7;
   private board: Connect4FieldContentDto[][];

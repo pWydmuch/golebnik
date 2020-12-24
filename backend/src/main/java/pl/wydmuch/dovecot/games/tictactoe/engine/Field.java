@@ -8,7 +8,7 @@ class Field {
 
     boolean allHaveSameSign(Field... otherFields) {
         if (isWinningLine(otherFields)) markWinningLine(otherFields);
-        return isAllInLineSameSign(otherFields);
+        return fieldContentIsNotEmpty() && isAllInLineSameSign(otherFields);
     }
 
     public boolean isInWinningLine() {
@@ -29,7 +29,11 @@ class Field {
 
     private boolean isWinningLine(Field... otherFields) {
         boolean allInLineSameSign = isAllInLineSameSign(otherFields);
-        return fieldContent != FieldContent.EMPTY && allInLineSameSign;
+        return fieldContentIsNotEmpty() && allInLineSameSign;
+    }
+
+    private boolean fieldContentIsNotEmpty() {
+        return fieldContent != FieldContent.EMPTY;
     }
 
     private boolean isAllInLineSameSign(Field[] otherFields) {

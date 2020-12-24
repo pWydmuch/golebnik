@@ -8,10 +8,7 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.wydmuch.dovecot.games.connect4.engine.Connect4Move;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.GameState;
-import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeMove;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
 import java.util.List;
 import java.util.Set;
@@ -32,38 +29,33 @@ public class RoomController {
     @ResponseBody
     public void createRoom(@PathVariable String gameName){
         roomService.createRoom(gameName);
-        messagingTemplate.convertAndSend("/topic/rooms", roomService.getRoomsIds());
+        messagingTemplate.convertAndSend("/topic/rooms", roomService.getRoomDtos());
     }
 
     @DeleteMapping("/rooms/{roomId}")
     @ResponseBody
     public void deleteRoom(@PathVariable String roomId){
         roomService.deleteRoom(roomId);
-        messagingTemplate.convertAndSend("/topic/rooms", roomService.getRoomsIds());
+        messagingTemplate.convertAndSend("/topic/rooms", roomService.getRoomDtos());
     }
 
-//    @GetMapping("/rooms/{roomId}")
-//    @ResponseBody
-//    public TicTacToeGameState getGameManager(@PathVariable String roomId){
-//
-//    }
     @SubscribeMapping("/ttt/{roomId}")
-    public GameState onSubscription(@DestinationVariable String roomId){
+    public RoomActivityState onSubscription(@DestinationVariable String roomId){
         System.out.println("Subbb");
         return roomService.onSubscription(roomId);
     }
 
     @MessageMapping("/ttt/{roomId}")
-    public void makeMove(@Payload Connect4Move   ticTacToeMove, @DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor){
-        roomService.makeMove(roomId, ticTacToeMove,headerAccessor);
-        messagingTemplate.convertAndSend("/topic/ttt/" + roomId, roomService.getGameState(roomId));
+    public void makeMove(@Payload String gameMove, @DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor){
+        roomService.doAction(roomId, gameMove,headerAccessor);
+        messagingTemplate.convertAndSend("/topic/ttt/" + roomId, roomService.getRoomActivityState(roomId));
     }
 
     @PostMapping("rooms/{roomId}/players/{playerSessionId}")
     @ResponseBody
     public void addPlayer(@PathVariable String roomId, @PathVariable String playerSessionId,@RequestParam int playerNumber){
         System.out.println("added " + playerNumber );
-        roomService.addPlayer(playerSessionId,roomId,playerNumber);
+        roomService.addRoomUser(playerSessionId,roomId,playerNumber);
         messagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/players", roomService.getRoomUsers(roomId));
     }
 
@@ -71,7 +63,7 @@ public class RoomController {
     @ResponseBody
     public void removePlayer(@PathVariable String roomId, @PathVariable String playerSessionId){
         System.out.println("removed");
-        roomService.removePlayer(playerSessionId,roomId);
+        roomService.removeRoomUser(playerSessionId,roomId);
         messagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/players", roomService.getRoomUsers(roomId));
     }
 
@@ -83,21 +75,21 @@ public class RoomController {
 
     @MessageMapping("/rooms")
     @SendTo("/topic/rooms")
-    public Set<String> getGames(){
-        return roomService.getRoomsIds();
+    public List<RoomDto> getRooms(){
+        return roomService.getRoomDtos();
     }
 
     @DeleteMapping("/rooms/{roomId}/game")
     @ResponseBody
     public void resetGame(@PathVariable String roomId){
-        roomService.resetGame(roomId);
-        messagingTemplate.convertAndSend("/topic/ttt/" + roomId, roomService.getGameState(roomId));
+        roomService.resetRoomActivity(roomId);
+        messagingTemplate.convertAndSend("/topic/ttt/" + roomId, roomService.getRoomActivityState(roomId));
     }
 
     @GetMapping("/rooms")
     @ResponseBody
-    public Set<String> getGames2() {
-        return roomService.getRoomsIds();
+    public List<RoomDto> getGames2() {
+        return roomService.getRoomDtos();
     }
 
     @MessageExceptionHandler

@@ -1,15 +1,15 @@
 package pl.wydmuch.dovecot.websocket.gameroom.game.api;
 
-public abstract class Player {
+public abstract class RoomActivityParticipant {
     private String playerName;
     private int playerNumber;
 
-    public Player(String playerName, int playerNumber) {
+    public RoomActivityParticipant(String playerName, int playerNumber) {
         this.playerName = playerName;
         this.playerNumber = playerNumber;
     }
 
-    public Player() {
+    public RoomActivityParticipant() {
     }
 
     public int getPlayerNumber() {

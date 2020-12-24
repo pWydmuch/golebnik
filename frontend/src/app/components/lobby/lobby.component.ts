@@ -3,6 +3,9 @@ import {RoomService} from '../../services/room.service';
 import {WebSocketService} from '../../services/web-socket.service';
 import {Client} from 'stompjs';
 import {Router} from "@angular/router";
+import {TicTacToeBoardComponent} from "../games/tictactoe/tic-tac-toe-board/tic-tac-toe-board.component";
+import {RoomDto} from "../room-dto";
+import {Connect4BoardComponent} from "../games/connect4/connect4-board/connect4-board.component";
 
 @Component({
   selector: 'app-lobby',
@@ -11,8 +14,9 @@ import {Router} from "@angular/router";
 })
 export class LobbyComponent implements OnInit {
 
-  roomsIds: string[];
+  roomsDtos: RoomDto[];
   private readonly stompClient: Client;
+
 
   constructor(private webSocketService: WebSocketService,
               private gamesService: RoomService,
@@ -21,23 +25,25 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit() {
-   this.gamesService.getRoomsId().subscribe(resp => this.roomsIds = resp);
-   this.onConnected();
+    this.gamesService.getRoomsId().subscribe(resp => this.roomsDtos = resp);
+    this.onConnected();
   }
 
   onConnected() {
     this.stompClient.connect({}, () => {
-      this.stompClient.subscribe('/topic/rooms', payload => this.roomsIds = JSON.parse(payload.body));
+      this.stompClient.subscribe('/topic/rooms', payload => this.roomsDtos = JSON.parse(payload.body));
     });
   }
 
-  createRoom() {
-    this.gamesService.createRoom("Connect4").subscribe();
+  createRoom(gameType: string) {
+    this.gamesService.createRoom(gameType).subscribe();
   }
 
-
   goToRoom(roomId: string) {
-    this.router.navigateByUrl('/room', {state: {roomId, playersNumber: 2}});
+    const activityManagerId = this.roomsDtos.find(r => r.roomId === roomId).activityManagerId;
+
+
+    this.router.navigateByUrl('/room', {state: {roomId, activityManagerId, playersNumber: 2}});
   }
 
   removeRoom(roomId: string) {

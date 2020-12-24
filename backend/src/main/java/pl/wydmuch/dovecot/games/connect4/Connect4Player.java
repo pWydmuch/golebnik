@@ -4,7 +4,7 @@ package pl.wydmuch.dovecot.games.connect4;
 import pl.wydmuch.dovecot.games.AbstractPlayer;
 import pl.wydmuch.dovecot.games.connect4.engine.Connect4Move;
 import pl.wydmuch.dovecot.games.connect4.engine.FieldContent;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.Move;
+import pl.wydmuch.dovecot.games.Move;
 
 public class Connect4Player extends AbstractPlayer {
     private FieldContent playerSign;
