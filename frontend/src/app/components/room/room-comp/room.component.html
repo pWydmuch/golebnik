@@ -1,0 +1,19 @@
+<button (click)="goBack()">Back</button>
+<p>My name: {{playerSessionId}}</p>
+
+
+<div class="container ">
+  <div class="row">
+    <ng-template class="col-xs-8 mr-5" appGame></ng-template>
+    <div class="col-xs-4 mx-sm-5 ">
+      <div *ngFor="let number of playersNumber | times" class="m-sm-2">
+        <p>Player {{number}}</p>
+        <button class="btn btn-primary" (click)="addPlayer(number -1)"> {{playerButtonTexts[number-1]}}</button> <span *ngIf="(number-1)==nextTurnPlayerName"><---</span>
+        <button *ngIf="showRemove(number-1)" class="btn btn-danger" (click)="removePlayer(number -1)">remove player</button>
+      </div>
+      <app-chat  [stompClient]="stompClient"></app-chat>
+    </div>
+
+  </div>
+</div>
+

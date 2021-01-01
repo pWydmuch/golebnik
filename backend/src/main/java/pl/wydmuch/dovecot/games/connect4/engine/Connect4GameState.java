@@ -1,12 +1,13 @@
 package pl.wydmuch.dovecot.games.connect4.engine;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
-public class Connect4GameState implements RoomActivityState {
+
+public class Connect4GameState {
     private Field[][] board;
 
     private boolean isWinner;
     private boolean isDraw;
+    private int nextTurnPlayerNumber;
 
     public Field[][] getBoard() {
         return board;
@@ -32,4 +33,12 @@ public class Connect4GameState implements RoomActivityState {
         isDraw = draw;
     }
 
+
+    public int getNextTurnPlayerNumber() {
+        return nextTurnPlayerNumber;
+    }
+
+    public void setNextTurnPlayerNumber(int nextTurnPlayerNumber) {
+        this.nextTurnPlayerNumber = nextTurnPlayerNumber;
+    }
 }

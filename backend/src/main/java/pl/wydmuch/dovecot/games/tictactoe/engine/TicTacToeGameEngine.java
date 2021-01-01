@@ -30,11 +30,12 @@ public class TicTacToeGameEngine implements GameEngine {
     }
 
     @Override
-    public TicTacToeGameState getState() {
+    public TicTacToeGameState getState(int nextTurnPlayerNumber) {
         TicTacToeGameState ticTacToeGameState = new TicTacToeGameState();
         ticTacToeGameState.setBoard(board);
         ticTacToeGameState.setIsWinner(isGameWon());
         ticTacToeGameState.setIsDraw(isDraw());
+        ticTacToeGameState.setNextTurnPlayerNumber(nextTurnPlayerNumber);
         return ticTacToeGameState;
     }
 

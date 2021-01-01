@@ -1,11 +1,12 @@
 package pl.wydmuch.dovecot.games.tictactoe.engine;
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityState;
 
-class TicTacToeGameState implements RoomActivityState {
+
+class TicTacToeGameState  {
     private Field[][] board;
 
     private boolean isWinner;
     private boolean isDraw;
+    private int nextTurnPlayerNumber;
 
     public Field[][] getBoard() {
         return board;
@@ -31,4 +32,11 @@ class TicTacToeGameState implements RoomActivityState {
         isDraw = draw;
     }
 
+    public int getNextTurnPlayerNumber() {
+        return nextTurnPlayerNumber;
+    }
+
+    public void setNextTurnPlayerNumber(int nextTurnPlayerNumber) {
+        this.nextTurnPlayerNumber = nextTurnPlayerNumber;
+    }
 }

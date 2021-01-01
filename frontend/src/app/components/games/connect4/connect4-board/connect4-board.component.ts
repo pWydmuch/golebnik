@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Connect4FieldContentDto, Connect4FieldContentType} from "../model/connect4-field-content-dto";
 import {Client, Message} from "stompjs";
 import {TicTacToeGameState} from "../../tictactoe/model/tic-tac-toe-game-state";
@@ -17,10 +17,13 @@ export class Connect4BoardComponent implements OnInit, GameComponent {
   private static readonly ROW_NR: number = 6;
   private static readonly COLUMN_NR: number = 7;
   private board: Connect4FieldContentDto[][];
-  @Input() private stompClient: Client;
+  @Input() stompClient: Client;
+  @Output() endGameEmitter: EventEmitter<string> = new EventEmitter<string>();
   private roomId: string;
   private gameState: Connect4GameState;
   private exceptionMessage: string;
+  private gameName = "Connect4"
+  nextTurnPlayerNameEmitter: EventEmitter<number>;
   constructor(private ticTacToeService: TicTacToeService<Connect4GameState>,
               private toastr: ToastrService) { }
 
@@ -78,4 +81,6 @@ export class Connect4BoardComponent implements OnInit, GameComponent {
       positionClass: 'toast-top-center',
     });
   }
+
+
 }

@@ -1,4 +1,4 @@
-<div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+<div class="d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
   <div class="container">
     <div class="d-flex flex-column justify-content-center align-items-center">
       <div *ngFor="let row of board, let i = index" class="row">
@@ -10,4 +10,4 @@
 <div *ngIf="exceptionMessage">
   {{exceptionMessage}}
 </div>
-<button (click)="handleReset()">Reset The Game</button>
+

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {RoomDto} from "../components/room-dto";
+import {RoomDto} from "../components/room/room-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,8 @@ export class RoomService {
   constructor(private http: HttpClient) {
   }
 
-  getRoomsId(): Observable<RoomDto[]> {
-    return this.http.get<RoomDto[]>(this.url);
+  getRoomsId(gameName: string): Observable<RoomDto[]> {
+    return this.http.get<RoomDto[]>(`${environment.basicUrl}/${gameName}/rooms`);
   }
 
   createRoom(gameName: string): Observable<any> {
@@ -27,8 +27,11 @@ export class RoomService {
   }
 
   addPlayer(roomId: string, playerSessionId: string, playerNumber: string): Observable<any> {
-
     return this.http.post(`${this.url}/${roomId}/players/${playerSessionId}`, null, {params: {playerNumber}});
+  }
+
+  confirmPlayer(roomId: string, playerSessionId: string): Observable<any> {
+    return this.http.put(`${this.url}/${roomId}/players/${playerSessionId}`, null);
   }
 
   removePlayer(roomId: string, playerSessionId: string) {

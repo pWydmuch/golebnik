@@ -1,6 +1,6 @@
 package pl.wydmuch.dovecot.games;
 
-import pl.wydmuch.dovecot.websocket.gameroom.game.api.RoomActivityParticipant;
+import pl.wydmuch.dovecot.game.api.RoomActivityParticipant;
 
 public abstract class AbstractPlayer extends RoomActivityParticipant {
 
