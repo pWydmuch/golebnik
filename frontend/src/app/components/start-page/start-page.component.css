@@ -1,0 +1,10 @@
+.startContainer{
+  /*background-image: url("../../../assets/start-bg.png");*/
+  background-repeat: no-repeat;
+  /*height: 600px;*/
+  width: 100%;
+  background-size: 30% auto;
+  background-position: center;
+  background-color: white;
+  font-family: 'Montserrat', sans-serif;
+}

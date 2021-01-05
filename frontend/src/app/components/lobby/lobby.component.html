@@ -1,16 +1,23 @@
-<button (click)="goBack()">Back</button>
-
+<button class="mx-2" mat-raised-button color="primary" (click)="goBack()">Back</button>
+<button class="mb-3" mat-raised-button color="primary" (click)="createRoom()">Create a room
+</button>
 <div>
   <ul>
     <li *ngFor="let dto of roomsDtos">
-      <button class="btn btn-success my-sm-1" (click)="goToRoom(dto.roomId)">Room {{dto.roomId}}
-        <span *ngFor="let player of dto.roomUsers">
-          <p>{{player === null ? '---' : player.name}}</p>
-        </span>
-      </button>
+      <mat-card class="example-card" (click)="goToRoom(dto.roomId)">
+        <mat-card-header>
+          <mat-card-title>Room {{dto.roomId}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Present players:</p>
+          <p *ngFor="let player of dto.roomUsers">
+            <span>{{player === null ? '---' : player.name}}</span>
+          </p>
+        </mat-card-content>
+      </mat-card>
       <div (click)="removeRoom(dto.roomId)">X</div>
     </li>
   </ul>
 </div>
-<button class="btn btn-primary ml-sm-3" (click)="createRoom()">Create room</button>
+
 

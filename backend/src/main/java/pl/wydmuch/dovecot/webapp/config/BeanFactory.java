@@ -2,7 +2,7 @@ package pl.wydmuch.dovecot.webapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.wydmuch.dovecot.game.api.RoomActivityManagerFactory;
+import pl.wydmuch.dovecot.activity.ActivityManagerFactory;
 import pl.wydmuch.dovecot.games.GameManagerFactory;
 import pl.wydmuch.dovecot.room.RoomService;
 
@@ -15,7 +15,7 @@ public class BeanFactory {
     }
 
     @Bean
-    public RoomActivityManagerFactory getRoomActivityManagerFactory(){
+    public ActivityManagerFactory getRoomActivityManagerFactory(){
         return new GameManagerFactory();
     }
 

@@ -1,0 +1,41 @@
+<div class="mainContainer">
+  <button
+    (click)="showLoginForm()"
+    *ngIf="!isLoggedIn()"
+    mat-raised-button
+    color="primary"
+    class="loginBtn"
+  >
+    Login
+  </button>
+  <button
+    (click)="showRegisterForm()"
+    *ngIf="!isLoggedIn()"
+    mat-raised-button
+    color="primary"
+    class="registerBtn"
+  >
+    Sign up
+  </button>
+
+  <button *ngIf="isLoggedIn()" mat-raised-button color="primary" class="registerBtn accBtn" [matMenuTriggerFor]="menu">
+    {{ tokenService.getUser() }}
+    <span class="material-icons" style="margin:0;padding:0;">
+      arrow_drop_down
+    </span>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="openDialog()">Change user settings</button>
+    <button mat-menu-item (click)="changePassword()">Change password</button>
+    <button mat-menu-item (click)="logout()">Log out</button>
+  </mat-menu>
+
+  <app-register-form
+    (onHide)="changeHide($event)"
+    *ngIf="isActive"
+  ></app-register-form>
+  <app-login-form
+    (onHideLogin)="changeHideLogin($event)"
+    *ngIf="isLoginActive"
+  ></app-login-form>
+</div>

@@ -6,7 +6,7 @@ public class Connect4Move implements Move {
     private int column;
     private FieldContent playerSign;
 
-    public Connect4Move(int row, int column, FieldContent playerSign) {
+    public Connect4Move(int column, FieldContent playerSign) {
         this.column = column;
         this.playerSign = playerSign;
     }

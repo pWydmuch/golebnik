@@ -13,19 +13,20 @@ import {GameComponent} from "../../game-component";
   templateUrl: './connect4-board.component.html',
   styleUrls: ['./connect4-board.component.css']
 })
-export class Connect4BoardComponent implements OnInit, GameComponent {
+export class Connect4BoardComponent extends GameComponent implements OnInit {
   private static readonly ROW_NR: number = 6;
   private static readonly COLUMN_NR: number = 7;
-  private board: Connect4FieldContentDto[][];
-  @Input() stompClient: Client;
-  @Output() endGameEmitter: EventEmitter<string> = new EventEmitter<string>();
+   board: Connect4FieldContentDto[][];
   private roomId: string;
-  private gameState: Connect4GameState;
+  gameState: Connect4GameState;
   private exceptionMessage: string;
   private gameName = "Connect4"
-  nextTurnPlayerNameEmitter: EventEmitter<number>;
+
+  private playerName: string;
   constructor(private ticTacToeService: TicTacToeService<Connect4GameState>,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService) {
+    super(toastr);
+  }
 
   ngOnInit() {
     this.board = Array.from(Array(Connect4BoardComponent.ROW_NR),
@@ -36,51 +37,14 @@ export class Connect4BoardComponent implements OnInit, GameComponent {
         }));
   }
 
-  onConnected(roomId: string, playerSessionId: string) {
-    console.log('child connected');
-    this.roomId = roomId;
-    this.stompClient.subscribe(`/app/ttt/${this.roomId}`, payload => this.onMessageReceived(payload));
-    this.stompClient.subscribe(`/topic/ttt/${this.roomId}`, payload => this.onMessageReceived(payload));
-    this.stompClient.subscribe('/user/topic/ttt/error', payload => this.onExceptionReceived(payload));
-  }
 
-  onMessageReceived(payload) {
-    console.log(payload);
-    const message = JSON.parse(payload.body);
-    console.log(message);
-    this.gameState = message;
-    this.board = message.board;
-    if (this.gameState.isWinner) {
-      this.toastr.info('There\'s winner', '', {
-        positionClass: 'toast-top-center',
-      });
-    } else if (this.gameState.isDraw) {
-      this.toastr.info('It\'s draw', '', {
-        positionClass: 'toast-top-center',
-      });
-    }
-  }
+
 
   handleFieldClick(row: number, column: number) {
     console.log('clicked');
-    this.stompClient.send(`/app/ttt/${this.roomId}`, {},
-      JSON.stringify(new Connect4Move(column, PlayerSign.RED))
+    this.stompClient.send(`/app/ttt/${this.roomId}/${this.playerName}`, {},
+      JSON.stringify(new Connect4Move(column, null))
     );
   }
-
-  handleReset() {
-    this.ticTacToeService.resetGame(this.roomId).subscribe(gameState => {
-      this.gameState = gameState;
-      this.board = this.gameState.board;
-    });
-  }
-
-  private onExceptionReceived(err: Message) {
-    console.log(err);
-    this.toastr.error(err.body, '', {
-      positionClass: 'toast-top-center',
-    });
-  }
-
 
 }

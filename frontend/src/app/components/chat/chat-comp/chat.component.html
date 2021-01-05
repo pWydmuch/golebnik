@@ -32,7 +32,7 @@
         <div class="input-group clearfix">
           <input #messageInput type="text" [(ngModel)]='messageToSend.content' name="messageToSend" id="message"
                  placeholder="Type a message..." autocomplete="off" class="form-control"/>
-          <button (click)="sendMessage()" class="primary">Send</button>
+          <button (click)="sendMessage()" mat-raised-button color="primary">Send</button>
         </div>
       </div>
     </form>

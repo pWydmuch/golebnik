@@ -1,4 +1,21 @@
-li button{
-  width: 400px;
+li mat-card-title {
+  /*width: 400px;*/
   text-align: left;
+}
+
+ul{
+  list-style-type: none;
+}
+
+.example-card {
+  max-width: 700px;
+  box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+}
+
+.example-card:hover{
+  box-shadow: 0 3px 11px #673ab7;
+}
+
+mat-card-title{
+  text-align: center;
 }

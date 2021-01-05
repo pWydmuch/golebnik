@@ -2,13 +2,13 @@ package pl.wydmuch.dovecot.games;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.wydmuch.dovecot.game.api.RoomActivityManager;
+import pl.wydmuch.dovecot.activity.ActivityManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public  class GenericGameManager implements RoomActivityManager {
+public  class GenericGameManager implements ActivityManager {
     private List<AbstractPlayer> players;
     private static final int PLAYERS_NUMBER = 2;
     private GameEngine engine;

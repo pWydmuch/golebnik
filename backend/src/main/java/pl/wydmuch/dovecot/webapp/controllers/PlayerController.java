@@ -27,10 +27,10 @@ public class PlayerController {
 
 
 
-    @PutMapping("rooms/{roomId}/players/{playerSessionId}")
+    @PutMapping("rooms/{roomId}/players/{playerName}")
     @ResponseBody
-    public void confirmRoomUser(@PathVariable String roomId, @PathVariable String playerSessionId){
-        roomService.confirmRoomUser(playerSessionId,roomId);
+    public void confirmRoomUser(@PathVariable String roomId, @PathVariable String playerName){
+        roomService.confirmRoomUser(playerName,roomId);
         messagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/players/confirmations", roomService.getRoomUsers(roomId));
         if (roomService.isGameStarted(roomId)){
             messagingTemplate.convertAndSend("/topic/ttt/" + roomId, roomService.getRoomActivityState(roomId));
@@ -39,20 +39,20 @@ public class PlayerController {
 
     }
 
-    @PostMapping("rooms/{roomId}/players/{playerSessionId}")
+    @PostMapping("rooms/{roomId}/players/{playerName}")
     @ResponseBody
-    public void addPlayer(@PathVariable String roomId, @PathVariable String playerSessionId, @RequestParam int playerNumber){
+    public void addPlayer(@PathVariable String roomId, @PathVariable String playerName, @RequestParam int playerNumber){
         System.out.println("added " + playerNumber );
-        roomService.addRoomUser(playerSessionId,roomId,playerNumber);
+        roomService.addRoomUser(playerName,roomId,playerNumber);
         sendRoomUsers(roomId);
         sendRoomDtos(roomId);
     }
 
-    @DeleteMapping("rooms/{roomId}/players/{playerSessionId}")
+    @DeleteMapping("rooms/{roomId}/players/{playerName}")
     @ResponseBody
-    public void removePlayer(@PathVariable String roomId, @PathVariable String playerSessionId){
+    public void removePlayer(@PathVariable String roomId, @PathVariable String playerName){
         System.out.println("removed");
-        roomService.removeRoomUser(playerSessionId,roomId);
+        roomService.removeRoomUser(playerName,roomId);
         sendRoomUsers(roomId);
         sendRoomDtos(roomId);
     }

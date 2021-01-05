@@ -57,6 +57,6 @@ export class LobbyComponent implements OnInit {
   }
 
   goBack() {
-      this.location.back();
+    this.router.navigateByUrl('/game-chooser');
   }
 }

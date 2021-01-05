@@ -1,6 +1,6 @@
 import {Component, ComponentFactoryResolver, OnInit, Type, ViewChild} from '@angular/core';
 import {RoomService} from '../../../services/room.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {WebSocketService} from '../../../services/web-socket.service';
 import {Client, Message} from 'stompjs';
 import {ChatComponent} from '../../chat/chat-comp/chat.component';
@@ -14,6 +14,7 @@ import {PlayingConfirmationDialogComponent} from "../playing-confirmation-dialog
 import {PlayerDto} from "../player-dto";
 import {ToastrService} from "ngx-toastr";
 import {compileModuleFactory} from "@angular/compiler/src/render3/r3_module_factory_compiler";
+import {TokenStorageService} from "../../../services/auth/token-storage.service";
 
 
 @Component({
@@ -24,22 +25,25 @@ import {compileModuleFactory} from "@angular/compiler/src/render3/r3_module_fact
 export class RoomComponent implements OnInit {
   private roomId: string;
   private stompClient: Client;
-  private playerSessionId: string;
+  private userName: string;
   private players: PlayerDto[];
   private playersNumber: number;
   private nextTurnPlayerName: string;
   @ViewChild(GameDirective, {static: true}) gameDirective: GameDirective;
   @ViewChild(ChatComponent, {static: false}) chatComp: ChatComponent;
   playerButtonTexts: string[];
+  private gameName: string;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
               private webSocketService: WebSocketService,
               private roomService: RoomService,
               private route: ActivatedRoute,
               public dialog: MatDialog,
-              private location: Location,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              public tokenService: TokenStorageService,
+              private router: Router) {
     this.stompClient = this.webSocketService.connect();
+    this.userName = this.tokenService.getUser();
   }
 
   ngOnInit() {
@@ -47,6 +51,7 @@ export class RoomComponent implements OnInit {
     this.playersNumber = history.state.playersNumber;
     const activityManagerId = history.state.gameName;
     let gameType;
+    this.gameName = activityManagerId;
     if (activityManagerId === "TicTacToe") gameType = TicTacToeBoardComponent;
     if (activityManagerId === "Connect4") gameType = Connect4BoardComponent;
     this.playerButtonTexts = new Array(this.playersNumber).fill('sit down');
@@ -59,9 +64,9 @@ export class RoomComponent implements OnInit {
 
   connect(gameType: Type<any>) {
     this.stompClient.connect({}, () => {
-      this.playerSessionId = /\/([^\/]+)\/websocket/.exec((this.stompClient.ws as any)._transport.url)[1];
+      // this.userName = /\/([^\/]+)\/websocket/.exec((this.stompClient.ws as any)._transport.url)[1];
       this.loadComponent(gameType)
-      this.chatComp.onConnected(this.roomId, this.playerSessionId);
+      this.chatComp.onConnected(this.roomId, this.userName);
       this.subscribeToPlayers();
       this.stompClient.subscribe('/user/topic/ttt/error', payload => this.onExceptionReceived(payload));
       this.stompClient.subscribe(`/topic/ttt/${this.roomId}/started`, payload => this.toastr.info(payload.body, '', {
@@ -76,7 +81,7 @@ export class RoomComponent implements OnInit {
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<GameComponent>(componentFactory);
     componentRef.instance.stompClient = this.stompClient;
-    componentRef.instance.onConnected(this.roomId, this.playerSessionId);
+    componentRef.instance.onConnected(this.roomId, this.userName);
     componentRef.instance.endGameEmitter.subscribe(() => {
       if (this.userInGame()) {
         this.openModal()
@@ -91,7 +96,7 @@ export class RoomComponent implements OnInit {
   addPlayer(playerNumber: string) {
     console.log('add player');
     if (!this.userInGame()) {
-      this.roomService.addPlayer(this.roomId, this.playerSessionId, playerNumber)
+      this.roomService.addPlayer(this.roomId, this.userName, playerNumber)
         .subscribe(res => {
             console.log(res)
           },
@@ -109,8 +114,9 @@ export class RoomComponent implements OnInit {
     }
   }
 
-  removePlayer() {
-    this.roomService.removePlayer(this.roomId, this.playerSessionId).subscribe(
+  removePlayer(event) {
+    event.stopPropagation();
+    this.roomService.removePlayer(this.roomId, this.userName).subscribe(
       res => {
         console.log(res)
       },
@@ -137,18 +143,19 @@ export class RoomComponent implements OnInit {
         positionClass: 'toast-top-center',
       });
     } else {
-      this.location.back();
+      const gameName = this.gameName;
+      this.router.navigateByUrl('/lobby', {state: {gameName, playersNumber: 2}});
     }
   }
 
   showRemove(playerNumber: number) {
-    return this.playerButtonTexts[playerNumber] === this.playerSessionId;
+    return this.playerButtonTexts[playerNumber] === this.userName;
   }
 
   private userInGame() {
     return this.players.filter(p => p !== null)
       .map(p => p.name)
-      .includes(this.playerSessionId);
+      .includes(this.userName);
   }
 
   private changePlayersButtonText() {
@@ -179,9 +186,9 @@ export class RoomComponent implements OnInit {
     dialogConfig.disableClose = true;
     // dialogConfig.id = "modal-component";
     dialogConfig.height = "150px";
-    dialogConfig.width = "600px";
+    dialogConfig.width = "400px";
     const roomId = this.roomId;
-    const playerSessionId = this.playerSessionId;
+    const playerSessionId = this.userName;
     const playersNumber = this.playersNumber;
     dialogConfig.data = {
       roomId,

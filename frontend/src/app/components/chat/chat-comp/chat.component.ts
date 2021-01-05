@@ -15,7 +15,7 @@ export class ChatComponent implements OnInit {
   @ViewChild('messageInput', {static: false}) messageInput: ElementRef;
   @Input() private stompClient: Client;
   private playerSessionId: string;
-  private roomId: string = "dfgd4";
+  private roomId: string;
   private messages: ChatMessage[] = [];
   private messageToSend: ChatMessage = new ChatMessage();
   private readonly colors = [
@@ -34,10 +34,12 @@ export class ChatComponent implements OnInit {
   onConnected(roomId: string, playerSessionId: string) {
     this.roomId = roomId;
     this.playerSessionId = playerSessionId;
+    this.stompClient.subscribe(`/app/chat/${this.roomId}`, (payload) => this.onMessageReceived(payload));
     this.stompClient.subscribe(`/topic/chat/${this.roomId}`, (payload) => this.onMessageReceived(payload));
-    this.stompClient.send(`/app/chat/${this.roomId}/send`, {},
-      JSON.stringify({sender: this.playerSessionId, type: MessageType.JOIN})
-    );
+
+    // this.stompClient.send(`/app/chat/${this.roomId}/send`, {},
+    //   JSON.stringify({sender: this.playerSessionId, type: MessageType.JOIN})
+    // );
   }
 
   async onMessageReceived(payload) {
@@ -73,16 +75,16 @@ export class ChatComponent implements OnInit {
     switch (message.type) {
       case MessageType.CHAT:
         return message.content;
-      case MessageType.JOIN:
-        return message.sender + ' joined!'
-      case MessageType.LEAVE:
-        message.content = message.sender + ' left!';
+      // case MessageType.JOIN:
+      //   return message.sender + ' joined!'
+      // case MessageType.LEAVE:
+      //   message.content = message.sender + ' left!';
     }
   }
 
   getMessageClass(message: ChatMessage) {
     return {
-      'event-message': message.type !== MessageType.CHAT,
+      // 'event-message': message.type !== MessageType.CHAT,
       'chat-message': message.type === MessageType.CHAT
     };
   }

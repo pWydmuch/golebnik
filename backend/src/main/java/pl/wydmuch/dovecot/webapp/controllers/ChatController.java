@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import pl.wydmuch.dovecot.chat.ChatMessage;
 import pl.wydmuch.dovecot.chat.ChatService;
@@ -15,8 +16,13 @@ import java.util.List;
 @Controller
 public class ChatController {
 
-    @Autowired
+    final
     ChatService chatService;
+
+    @Autowired
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     @MessageMapping("/chat/{id}/send")
     @SendTo("/topic/chat/{id}")
@@ -27,11 +33,9 @@ public class ChatController {
         return chatService.getMessages(id);
     }
 
-//    @MessageMapping("/chat/{id}/adduser")
-//    @SendTo("/topic/chat/{id}")
-//    public ChatMessage addUser(@Payload ChatMessage chatMessage,
-//                               SimpMessageHeaderAccessor headerAccessor) {
-//        return chatMessage;
-//    }
+    @SubscribeMapping("/chat/{id}")
+    public List<ChatMessage> onSubscription(@DestinationVariable String id){
+        return chatService.getMessages(id);
+    }
 
 }

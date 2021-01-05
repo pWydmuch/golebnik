@@ -1,13 +1,13 @@
 <h2 style="text-align: center;" mat-dialog-title>{{messageTitle}}</h2>
 <div id="modal-content-wrapper">
-  <header id="modal-header">
-    <h1 id="modal-title">Are you sure you want to logout?</h1>
-  </header>
-  <section id="modal-body">
-    <p>If you logout bad things might happen, but don't mind me, I'm just the description in a modal...</p>
-  </section>
+  <!--<section id="modal-body">-->
+    <!--<p>If you click start, you will have to wait until all player will do the same, then the game will start automatically</p>-->
+  <!--</section>-->
+  <!--<section id="modal-body">-->
+    <!--<p>If you click resign, your place will be free and everybody will be able to take it</p>-->
+  <!--</section>-->
   <footer id="modal-footer">
-    <button mat-raised-button id="modal-action-button" (click)="startGame()">Start</button>
-    <button mat-raised-button id="modal-cancel-button" (click)="resign()">Resign</button>
+    <button class="mr-2" mat-raised-button color="primary" (click)="startGame()">Start</button>
+    <button mat-raised-button color="warn" (click)="resign()">Resign</button>
   </footer>
 </div>

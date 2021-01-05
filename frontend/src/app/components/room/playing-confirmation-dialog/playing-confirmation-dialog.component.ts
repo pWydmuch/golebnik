@@ -12,7 +12,7 @@ import {PlayerDto} from "../player-dto";
 })
 export class PlayingConfirmationDialogComponent implements OnInit {
 
-  private messageTitle: string = "click to start game"
+  private messageTitle: string = "click to start a game"
   private stompClient;
   private roomId: string;
   private playerSessionId: string;

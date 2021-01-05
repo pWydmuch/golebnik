@@ -1,0 +1,103 @@
+<h2 style="text-align: center;" mat-dialog-title>Change user data</h2>
+<mat-dialog-content>
+  <form #regForm="ngForm" [formGroup]="myForm" (ngSubmit)="submit()">
+    <!-- Value: {{myForm.value | json}} -->
+    <div class="formBody">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="email"
+          formControlName="email"
+          required
+          spellcheck="false"
+          autocomplete="off"
+        />
+        <mat-error *ngIf="emailInput.errors?.required && emailInput.touched">
+          Email address is required
+        </mat-error>
+        <mat-error *ngIf="emailInput.errors?.email && emailInput.touched">
+          Wrong email address format
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          autocomplete="off"
+          matInput
+          placeholder="First name"
+          formControlName="firstname"
+          required
+          spellcheck="false"
+        />
+        <mat-error
+          *ngIf="firstnameInput.errors?.required && firstnameInput.touched"
+        >
+          First name is required
+        </mat-error>
+        <mat-error
+          *ngIf="firstnameInput.errors?.minlength && firstnameInput.touched"
+        >
+          min. 2 characters
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="margin-bottom: 10px;">
+        <input
+          matInput
+          placeholder="Last name"
+          formControlName="lastname"
+          required
+          spellcheck="false"
+          autocomplete="off"
+        />
+        <mat-error
+          *ngIf="lastnameInput.errors?.required && lastnameInput.touched"
+        >
+          Last name is required
+        </mat-error>
+        <mat-error
+          *ngIf="lastnameInput.errors?.minlength && lastnameInput.touched"
+        >
+          min. 2 characters
+        </mat-error>
+      </mat-form-field>
+
+      <mat-radio-group formControlName="gender">
+        <mat-radio-button value="M" style="margin-right: 10px;">Male</mat-radio-button>
+        <mat-radio-button value="F">Female</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field style="margin-top: 10px;">
+        <mat-label>Birth date: MM/DD/YYYY</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="birthday" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker [startAt]="birthdate" #picker></mat-datepicker>
+      </mat-form-field>
+      
+
+      <mat-dialog-actions>
+        <button
+          mat-raised-button
+          [disabled]="myForm.invalid"
+          color="primary"
+          type="submit"
+          style="margin-top: 10px; text-transform: uppercase;"
+        >
+          Save
+        </button>
+        <button
+          mat-raised-button
+          mat-dialog-close
+          mat-dialog-close="false"
+          style="
+            margin-top: 10px;
+            text-transform: uppercase;
+            background-color: rgb(250, 220, 164);
+          "
+        >
+          Cancel
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </form>
+</mat-dialog-content>

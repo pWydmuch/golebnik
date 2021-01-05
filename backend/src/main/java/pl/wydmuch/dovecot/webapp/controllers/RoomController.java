@@ -13,6 +13,7 @@ import pl.wydmuch.dovecot.room.RoomDto;
 import pl.wydmuch.dovecot.room.RoomUser;
 
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -32,7 +33,8 @@ public class RoomController {
 
     @PostMapping("/rooms/{gameName}")
     @ResponseBody
-    public void createRoom(@PathVariable String gameName){
+    public void createRoom(@PathVariable String gameName, Principal principal){
+        System.out.println("Principal: " + principal.getName());
         roomService.createRoom(gameName);
         messagingTemplate.convertAndSend("/topic/"+gameName+"/rooms", roomService.getRoomDtos(gameName));
     }
@@ -51,9 +53,9 @@ public class RoomController {
         return roomService.onSubscription(roomId);
     }
 
-    @MessageMapping("/ttt/{roomId}")
-    public void makeMove(@Payload String gameMove, @DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor){
-        roomService.doAction(roomId, gameMove,headerAccessor);
+    @MessageMapping("/ttt/{roomId}/{playerName}")
+    public void makeMove(@Payload String gameMove, @DestinationVariable String roomId , @DestinationVariable String playerName ){
+        roomService.doAction(roomId, gameMove,playerName);
         messagingTemplate.convertAndSend("/topic/ttt/" + roomId, roomService.getRoomActivityState(roomId));
     }
 

@@ -1,22 +1,25 @@
 package pl.wydmuch.dovecot.room;
 
-import pl.wydmuch.dovecot.game.api.RoomActivityManager;
+import pl.wydmuch.dovecot.activity.ActivityManager;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 
 public class Room {
     private String id;
-    private RoomActivityManager roomActivityManager;
+    private ActivityManager activityManager;
     private List<RoomUser> roomUsers;
     private int neededPlayersNumber;
+    private LocalDateTime creationTime;
     private String roomActivityId;
 
-    public Room(RoomActivityManager roomActivityManager) {
-        this.roomActivityManager = roomActivityManager;
-        roomActivityId = this.roomActivityManager.getManagerId();
+    public Room(ActivityManager activityManager) {
+        this.activityManager = activityManager;
+        roomActivityId = this.activityManager.getManagerId();
         roomUsers = new ArrayList<>();
-        this.neededPlayersNumber = roomActivityManager.getParticipantsNumber();
+        creationTime = LocalDateTime.now();
+        this.neededPlayersNumber = activityManager.getParticipantsNumber();
         for (int i = 0; i < neededPlayersNumber; i++) {
             roomUsers.add(null);
         }
@@ -43,7 +46,7 @@ public class Room {
 
     public void addRoomUser(String playerName, int playerNumber) {
         if (playerCanJoinGame(playerName, playerNumber)){
-//            roomActivityManager.addActivityParticipant(playerName,playerNumber);
+//            activityManager.addActivityParticipant(playerName,playerNumber);
             roomUsers.set(playerNumber, new RoomUser(playerName,playerNumber));
         }
         else {
@@ -64,13 +67,13 @@ public class Room {
         if (allRoomUserConfirmedParticipation()) startGame();
     }
 
-    public void removeRoomUser(String playerSessionId) {
-        if(roomActivityManager.isActivityStarted()) throw new RuntimeException("You can't leave game while playing");
+    public void removeRoomUser(String userName) {
+        if(activityManager.isActivityStarted() && !activityManager.isActivityFinished()) throw new RuntimeException("You can't leave game while playing");
 
-        roomActivityManager.removeActivityParticipant(playerSessionId);
+        activityManager.removeActivityParticipant(userName);
         for (int i = 0; i < roomUsers.size(); i++) {
             RoomUser player = roomUsers.get(i);
-            if (player != null && player.getName().equals(playerSessionId)) {
+            if (player != null && player.getName().equals(userName)) {
                 roomUsers.set(i, null);
             }
         }
@@ -81,12 +84,12 @@ public class Room {
         roomUsers.remove(player);
     }
 
-    public RoomActivityManager getRoomActivityManager() {
-        return roomActivityManager;
+    public ActivityManager getActivityManager() {
+        return activityManager;
     }
 
-//    public void setGameManager(RoomActivityManager roomActivityManager) {
-//        this.roomActivityManager = roomActivityManager;
+//    public void setGameManager(ActivityManager activityManager) {
+//        this.activityManager = activityManager;
 //    }
 
     public List<RoomUser> getRoomUsers() {
@@ -99,8 +102,8 @@ public class Room {
 
     private void startGame(){
         if (allRoomUserConfirmedParticipation()){
-            roomUsers.forEach(u->roomActivityManager.addActivityParticipant(u.getName(),u.getNumber()));
-            roomActivityManager.createNewActivity();
+            roomUsers.forEach(u-> activityManager.addActivityParticipant(u.getName(),u.getNumber()));
+            activityManager.createNewActivity();
         }
     }
 
@@ -116,7 +119,7 @@ public class Room {
     }
 
     private boolean playerCanJoinGame(String playerName, int playerNumber) {
-        if ((playerNumber+1) > neededPlayersNumber) throw new RuntimeException("RoomActivityParticipant number is too high, max playerNumber is " + neededPlayersNumber);
+        if ((playerNumber+1) > neededPlayersNumber) throw new RuntimeException("ActivityParticipant number is too high, max playerNumber is " + neededPlayersNumber);
         return roomUsers.get(playerNumber) == null &&
                 thereIsNoUserWithName(playerName);
     }
@@ -131,7 +134,11 @@ public class Room {
     public void cancelRoomUsersConfirmations() {
         roomUsers.stream().filter(Objects::nonNull).forEach(u->{
             u.setConfirmationDone(false);
-            roomActivityManager.removeActivityParticipant(u.getName());
+            activityManager.removeActivityParticipant(u.getName());
         });
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
 }
