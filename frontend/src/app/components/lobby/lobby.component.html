@@ -4,7 +4,7 @@
 <div>
   <ul>
     <li *ngFor="let dto of roomsDtos">
-      <mat-card class="example-card" (click)="goToRoom(dto.roomId)">
+      <mat-card class="example-card my-2" (click)="goToRoom(dto.roomId)">
         <mat-card-header>
           <mat-card-title>Room {{dto.roomId}}</mat-card-title>
         </mat-card-header>
@@ -15,7 +15,7 @@
           </p>
         </mat-card-content>
       </mat-card>
-      <div (click)="removeRoom(dto.roomId)">X</div>
+      <!--<div (click)="removeRoom(dto.roomId)">X</div>-->
     </li>
   </ul>
 </div>

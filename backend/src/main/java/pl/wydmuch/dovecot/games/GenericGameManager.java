@@ -12,14 +12,14 @@ public  class GenericGameManager implements ActivityManager {
     private List<AbstractPlayer> players;
     private static final int PLAYERS_NUMBER = 2;
     private GameEngine engine;
-    private int startingPlayeNumber = 0;
-    private AbstractGameFactory abstractGameFactory;
+    private int startingPlayerNumber = 0;
+    private GameFactory gameFactory;
     private int nextTurnPlayerNumber;
     private boolean firstGameWasStarted = false;
 
     public GenericGameManager(String gameName) {
-        abstractGameFactory = AbstractGameFactoryFactory.createGameFactory(gameName);
-        nextTurnPlayerNumber = startingPlayeNumber;
+        gameFactory = GameFactoryFactory.createGameFactory(gameName);
+        nextTurnPlayerNumber = startingPlayerNumber;
         players = new ArrayList<>();
         for (int i = 0; i < PLAYERS_NUMBER; i++) {
             players.add(null);
@@ -28,13 +28,13 @@ public  class GenericGameManager implements ActivityManager {
 
     @Override
     public String getManagerId() {
-        return abstractGameFactory.getGameName();
+        return gameFactory.getGameName();
     }
 
     @Override
     public void createNewActivity() {
         if (allPlayersArePresent()) {
-            engine = abstractGameFactory.createGameEngine();
+            engine = gameFactory.createGameEngine();
             if (firstGameWasStarted) {
                 changeStartingPlayerIndex();
             }
@@ -44,7 +44,7 @@ public  class GenericGameManager implements ActivityManager {
 
     @Override
     public void resetActivity() {
-        engine = abstractGameFactory.createGameEngine();
+        engine = gameFactory.createGameEngine();
         changeStartingPlayerIndex();
     }
 
@@ -53,7 +53,7 @@ public  class GenericGameManager implements ActivityManager {
         if (engine.isGameEnded()) throw new RuntimeException("Game is finished");
         checkIfPlayerCanMakeMove(participantName);
         AbstractPlayer playerMakingMove = getPlayerWithName(participantName);;
-        Move move = abstractGameFactory.parseGameMove(action);
+        Move move = gameFactory.parseGameMove(action);
         playerMakingMove.makeMovePlayerSpecific(move);
         engine.makeMove(move);
         if (!engine.isGameEnded())findNextTurnPlayerName(playerMakingMove.getPlayerNumber());
@@ -71,7 +71,7 @@ public  class GenericGameManager implements ActivityManager {
     @Override
     public String getActivityState() {
         try {
-            Object gameState = engine != null ? engine.getState(nextTurnPlayerNumber) : abstractGameFactory.createGameEngine().getState(nextTurnPlayerNumber);
+            Object gameState = engine != null ? engine.getState(nextTurnPlayerNumber) : gameFactory.createGameEngine().getState(nextTurnPlayerNumber);
             return new ObjectMapper().writeValueAsString(gameState);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -95,7 +95,7 @@ public  class GenericGameManager implements ActivityManager {
 
     @Override
     public void addActivityParticipant(String participantName, int participantNumber) {
-        AbstractPlayer player = abstractGameFactory.createPlayer(participantName, participantNumber);
+        AbstractPlayer player = gameFactory.createPlayer(participantName, participantNumber);
         players.set(participantNumber,player);
     }
 
@@ -114,7 +114,7 @@ public  class GenericGameManager implements ActivityManager {
     }
 
     private void changeStartingPlayerIndex() {
-        startingPlayeNumber = (startingPlayeNumber + 1) % PLAYERS_NUMBER;
+        startingPlayerNumber = (startingPlayerNumber + 1) % PLAYERS_NUMBER;
     }
 
     private AbstractPlayer getPlayerWithName(String playerName) {
@@ -130,6 +130,6 @@ public  class GenericGameManager implements ActivityManager {
     }
 
     private boolean playerWantingMakeMoveIsNotPlayerWhoStarts(String playerName) {
-        return !players.get(startingPlayeNumber).getPlayerName().equals(playerName);
+        return !players.get(startingPlayerNumber).getPlayerName().equals(playerName);
     }
 }

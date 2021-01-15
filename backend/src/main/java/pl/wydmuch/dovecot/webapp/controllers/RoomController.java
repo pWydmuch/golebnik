@@ -24,8 +24,7 @@ public class RoomController {
     private final RoomService roomService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    //TODO te wszystkie convertAndSend powinny raczej isc do serwisu aplikacyjnego
-    @Autowired
+
     public RoomController(RoomService roomService,SimpMessagingTemplate messagingTemplate) {
         this.roomService = roomService;
         this.messagingTemplate = messagingTemplate;

@@ -1,4 +1,4 @@
-package pl.wydmuch.dovecot.activity;
+package pl.wydmuch.dovecot.games;
 
 public abstract class ActivityParticipant {
     private String playerName;

@@ -1,6 +1,5 @@
 package pl.wydmuch.dovecot.room;
 
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import pl.wydmuch.dovecot.activity.ActivityManagerFactory;
 import pl.wydmuch.dovecot.activity.ActivityManager;
 
@@ -62,7 +61,7 @@ public class RoomService {
     }
 
     public void createRoom(String gameName) {
-        ActivityManager activityManager = activityManagerFactory.createGame(gameName);
+        ActivityManager activityManager = activityManagerFactory.createActivityManager(gameName);
         Room room = new Room(activityManager);
         room.setId(UUID.randomUUID().toString());
         rooms.put(room.getId(), room);

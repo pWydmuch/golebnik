@@ -4,6 +4,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import pl.wydmuch.dovecot.chat.ChatService;
 import pl.wydmuch.dovecot.room.RoomService;
 
 import java.util.HashSet;
@@ -13,10 +14,12 @@ import java.util.Set;
 public class AbandonRoomsRemoverScheduler {
 
     private final RoomService roomService;
+    private final ChatService chatService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public AbandonRoomsRemoverScheduler(RoomService roomService, SimpMessagingTemplate messagingTemplate) {
+    public AbandonRoomsRemoverScheduler(RoomService roomService, ChatService chatService, SimpMessagingTemplate messagingTemplate) {
         this.roomService = roomService;
+        this.chatService = chatService;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -24,16 +27,13 @@ public class AbandonRoomsRemoverScheduler {
     public void scheduleFixedDelayTask() {
         Set<String> gameNames = new HashSet<>();
         roomService.getRoomsWithoutUsersOlderThanMinutes(1).forEach(r->{
-            roomService.deleteRoom(r.getId());
+            String roomId = r.getId();
+            roomService.deleteRoom(roomId);
+            chatService.removeMessages(roomId);
             gameNames.add(r.getRoomActivityId());
         });
-
         gameNames.forEach(n->
             messagingTemplate.convertAndSend("/topic/"+n+"/rooms", roomService.getRoomDtos(n))
         );
-
-
-        System.out.println(
-                "Fixed delay task - " + System.currentTimeMillis() / 5000);
     }
 }

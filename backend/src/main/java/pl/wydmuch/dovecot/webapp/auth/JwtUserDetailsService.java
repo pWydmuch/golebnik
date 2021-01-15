@@ -9,9 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.wydmuch.dovecot.webapp.auth.dtos.PasswordChangeDto;
+import pl.wydmuch.dovecot.webapp.auth.user.User;
+import pl.wydmuch.dovecot.webapp.auth.user.UserRepository;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,5 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new RuntimeException("Bad credentials");
         }
     }
-
-
 }
 

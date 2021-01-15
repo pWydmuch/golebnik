@@ -20,6 +20,5 @@ public class WebSocketMemoryBrokerConfiguration implements WebSocketMessageBroke
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app")
         .enableSimpleBroker("/topic");
-
     }
 }

@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.FILE;
-import static org.junit.jupiter.api.Assertions.*;
 
 class Connect4GameEngineTest {
 
@@ -27,7 +25,6 @@ class Connect4GameEngineTest {
         engine.makeMove(new Connect4Move(5,FieldContent.RED));
         engine.makeMove(new Connect4Move(2,FieldContent.BLACK));
         engine.makeMove(new Connect4Move(6,FieldContent.RED));
-
 
         boolean isGameWon = engine.getState(0).getIsWinner();
 

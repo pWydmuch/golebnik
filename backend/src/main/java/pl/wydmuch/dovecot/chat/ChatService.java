@@ -1,34 +1,39 @@
 package pl.wydmuch.dovecot.chat;
 
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+
 public class ChatService {
 
-    private Map<String, List<ChatMessage>> roomsChats = new HashMap<>();
+    private Map<String, List<ChatMessage>> chats = new HashMap<>();
 
-    public List<ChatMessage> getMessages(String roomId) {
-        List<ChatMessage> chatMessages = roomsChats.get(roomId);
-        if (chatMessages == null) {
-            roomsChats.put(roomId, new ArrayList<>());
-        }
-        return chatMessages;
+    public ChatService() {
     }
 
-    public void addMessage(String roomId,ChatMessage message) {
-        List<ChatMessage> chatMessages = roomsChats.get(roomId);
+    public ChatService(Map<String, List<ChatMessage>> chats) {
+        this.chats = chats;
+    }
+
+    public List<ChatMessage> getMessages(String chatId) {
+        chats.putIfAbsent(chatId,new ArrayList<>());
+        return chats.get(chatId);
+    }
+
+    public void removeMessages(String chatId){
+        chats.remove(chatId);
+    }
+
+    public void addMessage(String chatId,ChatMessage message) {
+        List<ChatMessage> chatMessages = chats.get(chatId);
         if (chatMessages == null) {
             chatMessages = new ArrayList<>();
             chatMessages.add(message);
-            roomsChats.put(roomId, chatMessages);
+            chats.put(chatId, chatMessages);
         }else{
             chatMessages.add(message);
         }
-
     }
 }

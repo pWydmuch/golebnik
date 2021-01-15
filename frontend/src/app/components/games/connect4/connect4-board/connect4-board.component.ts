@@ -16,15 +16,15 @@ import {GameComponent} from "../../game-component";
 export class Connect4BoardComponent extends GameComponent implements OnInit {
   private static readonly ROW_NR: number = 6;
   private static readonly COLUMN_NR: number = 7;
-   board: Connect4FieldContentDto[][];
-  private roomId: string;
+  board: Connect4FieldContentDto[][];
+   roomId: string;
   gameState: Connect4GameState;
   private exceptionMessage: string;
   private gameName = "Connect4"
 
-  private playerName: string;
+  playerName: string;
   constructor(private ticTacToeService: TicTacToeService<Connect4GameState>,
-              private toastr: ToastrService) {
+              toastr: ToastrService) {
     super(toastr);
   }
 

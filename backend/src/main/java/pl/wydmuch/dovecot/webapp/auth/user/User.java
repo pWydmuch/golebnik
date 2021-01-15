@@ -1,4 +1,4 @@
-package pl.wydmuch.dovecot.webapp.auth;
+package pl.wydmuch.dovecot.webapp.auth.user;
 
 
 
@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,20 +17,15 @@ public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-
     @Length(min = 5)
     @Column(unique = true)
     private String login;
-
     @Length(min = 6)
     private String password;
-
     @Length(min =2)
     private String firstName;
-
     @Length(min = 2)
     private String lastName;
-
     @Email
     @Column(unique = true)
     private String email;

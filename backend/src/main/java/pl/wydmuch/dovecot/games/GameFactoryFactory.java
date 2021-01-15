@@ -1,13 +1,11 @@
 package pl.wydmuch.dovecot.games;
 
 import pl.wydmuch.dovecot.games.connect4.Connect4Factory;
-import pl.wydmuch.dovecot.games.connect4.engine.Connect4GameEngine;
 import pl.wydmuch.dovecot.games.tictactoe.TicTacToeFactory;
-import pl.wydmuch.dovecot.games.tictactoe.engine.TicTacToeGameEngine;
 
-public class AbstractGameFactoryFactory {
+public class GameFactoryFactory {
 
-    static AbstractGameFactory createGameFactory(String gameName){
+    static GameFactory createGameFactory(String gameName){
         switch (gameName){
             case "TicTacToe":
                 return new TicTacToeFactory();

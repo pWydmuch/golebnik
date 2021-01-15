@@ -10,18 +10,18 @@ export abstract class GameComponent {
 
   gameState: any;
   board: any
-  private playerName: string;
-  private roomId: string;
+  playerName: string;
+  roomId: string;
 
-  constructor(private toastr: ToastrService){}
+  constructor(protected toastr: ToastrService){}
 
   onConnected(roomId: string, playerName: string) {
-    console.log('child connected');
     this.playerName = playerName;
     this.roomId = roomId;
-    this.stompClient.subscribe(`/app/ttt/${this.roomId}`, payload => this.onMessageReceived(payload));
     this.stompClient.subscribe(`/topic/ttt/${this.roomId}`, payload => this.onMessageReceived(payload));
   }
+
+  // this.stompClient.subscribe(`/app/ttt/${this.roomId}`, payload => this.onMessageReceived(payload));
 
   onMessageReceived(payload) {
     console.log(payload);

@@ -17,15 +17,16 @@ export class TicTacToeBoardComponent extends GameComponent implements OnInit  {
 
   private static readonly ROW_NR: number = 3;
   private static readonly COLUMN_NR: number = 3;
-  private roomId: string;
+  roomId: string;
   board: TicTacToeFieldContentDto[][];
   gameState: TicTacToeGameState;
   private exceptionMessage: string;
-  private playerName: string;
+ playerName: string;
 
   constructor(private ticTacToeService: TicTacToeService<TicTacToeGameState>,
-              private toastr: ToastrService,
+              toastr: ToastrService,
               public dialog: MatDialog) {
+
     super(toastr);
 
   }
@@ -51,7 +52,6 @@ export class TicTacToeBoardComponent extends GameComponent implements OnInit  {
 
 
   handleFieldClick(row: number, column: number) {
-    console.log('clicked');
     this.stompClient.send(`/app/ttt/${this.roomId}/${this.playerName}`, {},
       JSON.stringify(new TicTacToeMove(row, column,null))
     );

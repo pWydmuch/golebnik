@@ -35,6 +35,7 @@ export class NavbarComponent implements OnInit {
   }
 
   showRegisterForm() {
+    console.log("clicked signup")
     this.isActive = true;
   }
 
