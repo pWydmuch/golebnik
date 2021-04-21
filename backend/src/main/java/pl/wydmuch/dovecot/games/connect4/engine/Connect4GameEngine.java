@@ -110,7 +110,7 @@ public class Connect4GameEngine implements GameEngine {
         for (Field field : line) {
             if (field.getFieldContent() == playerSign){
                 consecutiveSameSigns.add(field);
-            }else{
+            }else if(consecutiveSameSigns.size() != CONSECUTIVE_SAME_SIGNS_TO_WIN){
                 consecutiveSameSigns.clear();
             }
         }

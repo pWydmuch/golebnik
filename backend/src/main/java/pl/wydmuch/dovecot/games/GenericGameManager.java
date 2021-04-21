@@ -52,13 +52,17 @@ public  class GenericGameManager implements ActivityManager {
     public void doAction(String action, String participantName) {
         if (engine.isGameEnded()) throw new RuntimeException("Game is finished");
         checkIfPlayerCanMakeMove(participantName);
-        AbstractPlayer playerMakingMove = getPlayerWithName(participantName);;
+        AbstractPlayer playerMakingMove = getPlayerWithName(participantName);
         Move move = gameFactory.parseGameMove(action);
         playerMakingMove.makeMovePlayerSpecific(move);
         engine.makeMove(move);
-        if (!engine.isGameEnded())findNextTurnPlayerName(playerMakingMove.getPlayerNumber());
+        if (!engine.isGameEnded())
+            findNextTurnPlayerName(playerMakingMove.getPlayerNumber());
     }
-
+    private void changeStartingPlayerIndex() {
+        startingPlayerNumber = (startingPlayerNumber + 1) % PLAYERS_NUMBER;
+        nextTurnPlayerNumber = startingPlayerNumber;
+    }
     private void findNextTurnPlayerName(int playerMakingMoveNumber) {
         nextTurnPlayerNumber = players.stream()
                 .filter(Objects::nonNull)
@@ -113,9 +117,7 @@ public  class GenericGameManager implements ActivityManager {
         return players.stream().filter(Objects::nonNull).count()  == PLAYERS_NUMBER;
     }
 
-    private void changeStartingPlayerIndex() {
-        startingPlayerNumber = (startingPlayerNumber + 1) % PLAYERS_NUMBER;
-    }
+
 
     private AbstractPlayer getPlayerWithName(String playerName) {
         return players.stream().filter(p -> p.getPlayerName().equals(playerName))

@@ -19,6 +19,27 @@ public class RoomService {
         this.activityManagerFactory = activityManagerFactory;
     }
 
+    public void createRoom(String gameName) {
+        ActivityManager activityManager = activityManagerFactory.createActivityManager(gameName);
+        Room room = new Room(activityManager);
+        room.setId(UUID.randomUUID().toString());
+        rooms.put(room.getId(), room);
+    }
+
+    public void deleteRoom(String roomId) {
+        rooms.remove(roomId);
+    }
+
+    public void addRoomUser(String playerSessionId, String roomId, int playerNumber) {
+        Room room = rooms.get(roomId);
+        room.addRoomUser(playerSessionId, playerNumber);
+    }
+
+    public void removeRoomUser(String playerSessionId, String roomId) {
+        Room room = rooms.get(roomId);
+        room.removeRoomUser(playerSessionId);
+    }
+
     public List<RoomDto> getRoomDtos() {
         return rooms.values()
                 .stream()
@@ -60,26 +81,7 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
-    public void createRoom(String gameName) {
-        ActivityManager activityManager = activityManagerFactory.createActivityManager(gameName);
-        Room room = new Room(activityManager);
-        room.setId(UUID.randomUUID().toString());
-        rooms.put(room.getId(), room);
-    }
 
-    public void deleteRoom(String roomId) {
-        rooms.remove(roomId);
-    }
-
-    public void addRoomUser(String playerSessionId, String roomId, int playerNumber) {
-        Room room = rooms.get(roomId);
-        room.addRoomUser(playerSessionId, playerNumber);
-    }
-
-    public void removeRoomUser(String playerSessionId, String roomId) {
-        Room room = rooms.get(roomId);
-        room.removeRoomUser(playerSessionId);
-    }
 
     public ActivityManager getGame(String roomId) {
         return rooms.get(roomId).getActivityManager();
